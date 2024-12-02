@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class ReunionApoderado
  *
- * @property $IDReunionApoderado
+ * @property $IdReunionApoderado
  * @property $Asistencia
- * @property $HoraInicioReunionApoderado
- * @property $HoraFinReunionApoderado
  * @property $RunApoderado
- * @property $IDReunion
+ * @property $IdReunion
+ * @property $IdMalla
  * @property $created_at
  * @property $updated_at
  *
+ * @property Malla $malla
  * @property Reunion $reunion
  * @property Apoderado $apoderado
  * @package App
@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ReunionApoderado extends Model
 {
-    protected $primaryKey = 'IDReunionApoderado';
+    
     protected $perPage = 20;
 
     /**
@@ -31,15 +31,23 @@ class ReunionApoderado extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IDReunionApoderado', 'Asistencia', 'HoraInicioReunionApoderado', 'HoraFinReunionApoderado', 'RunApoderado', 'IDReunion'];
+    protected $fillable = ['IdReunionApoderado', 'Asistencia', 'RunApoderado', 'IdReunion', 'IdMalla'];
 
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    public function malla()
+    {
+        return $this->belongsTo(\App\Models\Malla::class, 'IdMalla', 'IdMalla');
+    }
+    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function reunion()
     {
-        return $this->belongsTo(\App\Models\Reunion::class, 'IDReunion', 'IDReunion');
+        return $this->belongsTo(\App\Models\Reunion::class, 'IdReunion', 'IdReunion');
     }
     
     /**

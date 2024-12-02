@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Anotacion
  *
- * @property $IDAnotacion
+ * @property $IdAnotacion
  * @property $TipoAnotacion
- * @property $Fecha
- * @property $Descripcion
+ * @property $DescripcionAnotacion
  * @property $created_at
  * @property $updated_at
  *
@@ -20,16 +19,15 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Anotacion extends Model
 {
-    protected $primaryKey = 'IDAnotacion';
+    
     protected $perPage = 20;
-
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IDAnotacion', 'TipoAnotacion', 'Fecha', 'Descripcion'];
+    protected $fillable = ['IdAnotacion', 'TipoAnotacion', 'DescripcionAnotacion'];
 
 
     /**
@@ -37,7 +35,7 @@ class Anotacion extends Model
      */
     public function registrosdeClases()
     {
-        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IDAnotacion', 'IDAnotacion');
+        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IdAnotacion', 'IDAnotacion');
     }
     
 }

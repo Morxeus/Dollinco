@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('evaluacions', function (Blueprint $table) {
-            $table->id('IDEvaluacion'); // AUTO_INCREMENT
-            $table->date('FechaEvaluacion')->nullable();
-            $table->decimal('Nota', 3, 1); // Nota con 1 dígitos en total y 2 decimales
+            $table->id('IdEvaluacion'); // AUTO_INCREMENT
+            $table->string('NombreEvaluacion', 50); // Nombre de la evaluación
+            $table->text('DescripcionEvaluacion')->nullable(); // Descripción opcional
+            $table->date('FechaEvaluacion'); // Fecha de la evaluación
+
             $table->timestamps();
         });
     }

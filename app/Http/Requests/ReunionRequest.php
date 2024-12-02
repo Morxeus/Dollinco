@@ -22,10 +22,12 @@ class ReunionRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'IDReunion' => 'required|unique:reunions,IDReunion',
-			'TipoReunion' => 'required',
+			'IdReunion' => 'required',
+			'TipoReunion' => 'required|string',
+			'FechaInicio' => 'required',
+			'FechaFin' => 'required',
+			'DescripcionReunion' => 'string',
 			'RunProfesor' => 'required|string',
-			'Fecha' => 'required|date',
         ];
     }
 }

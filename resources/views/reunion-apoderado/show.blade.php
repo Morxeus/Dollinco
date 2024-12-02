@@ -22,19 +22,11 @@
                         
                                 <div class="form-group mb-2 mb20">
                                     <strong>Idreunionapoderado:</strong>
-                                    {{ $reunionApoderado->IDReunionApoderado }}
+                                    {{ $reunionApoderado->IdReunionApoderado }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Asistencia:</strong>
                                     {{ $reunionApoderado->Asistencia }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Horainicioreunionapoderado:</strong>
-                                    {{ $reunionApoderado->HoraInicioReunionApoderado }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Horafinreunionapoderado:</strong>
-                                    {{ $reunionApoderado->HoraFinReunionApoderado }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Runapoderado:</strong>
@@ -42,7 +34,11 @@
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Idreunion:</strong>
-                                    {{ $reunionApoderado->IDReunion }}
+                                    {{ $reunionApoderado->IdReunion }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Idmalla:</strong>
+                                    {{ $reunionApoderado->IdMalla }}
                                 </div>
 
                     </div>

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@hasanyrole('administrador|profesor|apoderado')
+
 @section('template_title')
     Reunion Apoderados
 @endsection
@@ -11,14 +11,16 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
+
                             <span id="card_title">
                                 {{ __('Reunion Apoderados') }}
                             </span>
-                            <div class="float-right">
-                                <a href="{{ route('reunion-apoderados.create') }}" class="btn btn-primary btn-sm float-right" data-placement="left">
-                                    {{ __('Create New') }}
+
+                             <div class="float-right">
+                                <a href="{{ route('reunion-apoderados.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                  {{ __('Create New') }}
                                 </a>
-                            </div>
+                              </div>
                         </div>
                     </div>
                     @if ($message = Session::get('success'))
@@ -30,41 +32,37 @@
                     <div class="card-body bg-white">
                         <div class="table-responsive">
                             <table class="table table-striped table-hover">
-                                <thead>
+                                <thead class="thead">
                                     <tr>
                                         <th>No</th>
-                                        <th>ID</th>
-                                        <th>Asistencia</th>
-                                        <th>Inicio</th>
-                                        <th>Fin</th>
-                                        <th>Run Apoderado</th>
-                                        <th>ID Reunión</th>
-                                        <th>Acciones</th>
+                                        
+									<th >Idreunionapoderado</th>
+									<th >Asistencia</th>
+									<th >Runapoderado</th>
+									<th >Idreunion</th>
+									<th >Idmalla</th>
+
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($reunionApoderados as $reunionApoderado)
                                         <tr>
                                             <td>{{ ++$i }}</td>
-                                            <td>{{ $reunionApoderado->IDReunionApoderado }}</td>
-                                            <td>{{ $reunionApoderado->Asistencia }}</td>
-                                            <td>{{ $reunionApoderado->HoraInicioReunionApoderado }}</td>
-                                            <td>{{ $reunionApoderado->HoraFinReunionApoderado }}</td>
-                                            <td>{{ $reunionApoderado->RunApoderado }}</td>
-                                            <td>{{ $reunionApoderado->IDReunion }}</td>
+                                            
+										<td >{{ $reunionApoderado->IdReunionApoderado }}</td>
+										<td >{{ $reunionApoderado->Asistencia }}</td>
+										<td >{{ $reunionApoderado->RunApoderado }}</td>
+										<td >{{ $reunionApoderado->IdReunion }}</td>
+										<td >{{ $reunionApoderado->IdMalla }}</td>
+
                                             <td>
-                                                <form action="{{ route('reunion-apoderados.destroy', $reunionApoderado->IDReunionApoderado) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary" href="{{ route('reunion-apoderados.show', $reunionApoderado->IDReunionApoderado) }}">
-                                                        <i class="fa fa-fw fa-eye"></i> {{ __('Show') }}
-                                                    </a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('reunion-apoderados.edit', $reunionApoderado->IDReunionApoderado) }}">
-                                                        <i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}
-                                                    </a>
+                                                <form action="{{ route('reunion-apoderados.destroy', $reunionApoderado->id) }}" method="POST">
+                                                    <a class="btn btn-sm btn-primary " href="{{ route('reunion-apoderados.show', $reunionApoderado->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('reunion-apoderados.edit', $reunionApoderado->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="event.preventDefault(); confirm('¿Estás seguro de eliminar esta reunión?') ? this.closest('form').submit() : false;">
-                                                        <i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}
-                                                    </button>
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -78,5 +76,4 @@
             </div>
         </div>
     </div>
-    @endhasanyrole
 @endsection

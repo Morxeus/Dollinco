@@ -22,13 +22,12 @@ class MallaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'IDCurso' => 'required|exists:cursos,IDCurso',
-            'IDAsignatura' => 'required|array',  // Asegura que sea un array
-            'IDAsignatura.*' => 'exists:asignaturas,IDAsignatura',  // Cada elemento debe existir en asignaturas
-            'NumeroMatricula' => 'required|exists:matriculas,NumeroMatricula',
+			'IdMalla' => 'required',
+			'NombreMalla' => 'required|string',
+			'IdCurso' => 'required',
+			'IdAsignatura' => 'required',
+			'NumeroMatricula' => 'required',
+			'RunProfesor' => 'required|string',
         ];
     }
-    
-    
-    
 }

@@ -22,19 +22,27 @@
                         
                                 <div class="form-group mb-2 mb20">
                                     <strong>Idreunion:</strong>
-                                    {{ $reunion->IDReunion }}
+                                    {{ $reunion->IdReunion }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Tiporeunion:</strong>
                                     {{ $reunion->TipoReunion }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Runprofesor:</strong>
-                                    {{ $reunion->RunProfesor }}
+                                    <strong>Fechainicio:</strong>
+                                    {{ $reunion->FechaInicio }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Fecha:</strong>
-                                    {{ $reunion->Fecha }}
+                                    <strong>Fechafin:</strong>
+                                    {{ $reunion->FechaFin }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Descripcionreunion:</strong>
+                                    {{ $reunion->DescripcionReunion }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Runprofesor:</strong>
+                                    {{ $reunion->RunProfesor }}
                                 </div>
 
                     </div>

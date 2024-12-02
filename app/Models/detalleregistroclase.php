@@ -5,29 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class RegistrosdeClase
+ * Class Detalleregistroclase
  *
- * @property $IDRegistrodeClase
- * @property $IDCursoAsignatura
+ * @property $IdDetalleRegistroClase
+ * @property $NotaEvaluacion
+ * @property $IdRegistroClases
  * @property $NumeroMatricula
- * @property $IDEvaluacion
- * @property $IDAsistencia
- * @property $IDAnotacion
+ * @property $IdEvaluacion
+ * @property $IdAnotacion
+ * @property $IdAsistencia
  * @property $created_at
  * @property $updated_at
  *
  * @property Anotacion $anotacion
  * @property Asistencia $asistencia
- * @property CursoAsignatura $cursoAsignatura
  * @property Evaluacion $evaluacion
+ * @property Registroclase $registroclase
  * @property Matricula $matricula
- * @property ProfesorClase[] $profesorClases
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class RegistrosdeClase extends Model
+class Detalleregistroclase extends Model
 {
-    protected $primaryKey = 'IDRegistrodeClase';
+    
     protected $perPage = 20;
 
     /**
@@ -35,7 +35,7 @@ class RegistrosdeClase extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IDRegistrodeClase', 'IDCursoAsignatura', 'NumeroMatricula', 'IDEvaluacion', 'IDAsistencia', 'IDAnotacion'];
+    protected $fillable = ['IdDetalleRegistroClase', 'NotaEvaluacion', 'IdRegistroClases', 'NumeroMatricula', 'IdEvaluacion', 'IdAnotacion', 'IdAsistencia'];
 
 
     /**
@@ -43,7 +43,7 @@ class RegistrosdeClase extends Model
      */
     public function anotacion()
     {
-        return $this->belongsTo(\App\Models\Anotacion::class, 'IDAnotacion', 'IDAnotacion');
+        return $this->belongsTo(\App\Models\Anotacion::class, 'IdAnotacion', 'IdAnotacion');
     }
     
     /**
@@ -51,15 +51,7 @@ class RegistrosdeClase extends Model
      */
     public function asistencia()
     {
-        return $this->belongsTo(\App\Models\Asistencia::class, 'IDAsistencia', 'IDAsistencia');
-    }
-    
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function cursoAsignatura()
-    {
-        return $this->belongsTo(\App\Models\Malla::class, 'IDCursoAsignatura', 'IDCursoAsignatura');
+        return $this->belongsTo(\App\Models\Asistencia::class, 'IdAsistencia', 'IDAsistencia');
     }
     
     /**
@@ -67,7 +59,15 @@ class RegistrosdeClase extends Model
      */
     public function evaluacion()
     {
-        return $this->belongsTo(\App\Models\Evaluacion::class, 'IDEvaluacion', 'IDEvaluacion');
+        return $this->belongsTo(\App\Models\Evaluacion::class, 'IdEvaluacion', 'IdEvaluacion');
+    }
+    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function registroclase()
+    {
+        return $this->belongsTo(\App\Models\Registroclase::class, 'IdRegistroClases', 'IdRegistroClases');
     }
     
     /**
@@ -76,14 +76,6 @@ class RegistrosdeClase extends Model
     public function matricula()
     {
         return $this->belongsTo(\App\Models\Matricula::class, 'NumeroMatricula', 'NumeroMatricula');
-    }
-    
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function profesorClases()
-    {
-        return $this->hasMany(\App\Models\ProfesorClase::class, 'IDRegistrodeClase', 'IDRegistrodeClase');
     }
     
 }

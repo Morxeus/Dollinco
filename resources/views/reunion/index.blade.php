@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header bg-secondary">
+                    <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
 
                             <span id="card_title">
@@ -38,8 +38,10 @@
                                         
 									<th >Idreunion</th>
 									<th >Tiporeunion</th>
+									<th >Fechainicio</th>
+									<th >Fechafin</th>
+									<th >Descripcionreunion</th>
 									<th >Runprofesor</th>
-									<th >Fecha</th>
 
                                         <th></th>
                                     </tr>
@@ -49,20 +51,20 @@
                                         <tr>
                                             <td>{{ ++$i }}</td>
                                             
-										<td >{{ $reunion->IDReunion }}</td>
+										<td >{{ $reunion->IdReunion }}</td>
 										<td >{{ $reunion->TipoReunion }}</td>
+										<td >{{ $reunion->FechaInicio }}</td>
+										<td >{{ $reunion->FechaFin }}</td>
+										<td >{{ $reunion->DescripcionReunion }}</td>
 										<td >{{ $reunion->RunProfesor }}</td>
-										<td >{{ $reunion->Fecha }}</td>
 
                                             <td>
-                                                <form action="{{ route('reunions.destroy', $reunion->IDReunion) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('reunions.show', $reunion->IDReunion) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    @hasanyrole('administrador|profesor')
-                                                    <a class="btn btn-sm btn-success" href="{{ route('reunions.edit', $reunion->IDReunion) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
+                                                <form action="{{ route('reunions.destroy', $reunion->id) }}" method="POST">
+                                                    <a class="btn btn-sm btn-primary " href="{{ route('reunions.show', $reunion->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('reunions.edit', $reunion->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
-                                                    @endhasanyrole
                                                 </form>
                                             </td>
                                         </tr>

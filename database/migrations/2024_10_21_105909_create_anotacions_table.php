@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('anotacions', function (Blueprint $table) {
-            $table->id('IDAnotacion'); // AUTO_INCREMENT
+            $table->id('IdAnotacion'); // AUTO_INCREMENT
             $table->string('TipoAnotacion', 50); // Tipo de anotación
-            $table->date('Fecha'); // Fecha de la anotación
-            $table->text('Descripcion'); // Descripción de la anotación
+            $table->string('DescripcionAnotacion', 255); // Descripción de la anotación
+    
             $table->timestamps();
         });
     }

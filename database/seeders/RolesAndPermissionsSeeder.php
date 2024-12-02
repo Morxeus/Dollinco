@@ -107,16 +107,16 @@ class RolesAndPermissionsSeeder extends Seeder
             'eliminar reunion-apoderados',
         
             // Registros de Clases
-            'ver registrosde-clases',
-            'crear registrosde-clases',
-            'editar registrosde-clases',
-            'eliminar registrosde-clases',
+            'ver registroclases',
+            'crear registroclases',
+            'editar registroclases',
+            'eliminar registroclases',
         
-            // Profesor-Clases
-            'ver profesor-clases',
-            'crear profesor-clases',
-            'editar profesor-clases',
-            'eliminar profesor-clases',
+            // Detalle registro clases
+            'ver detalleregistroclases',
+            'crear detalleregistroclases',
+            'editar detalleregistroclases',
+            'eliminar detalleregistroclases',
         
             // Mallas
             'ver mallas',
@@ -155,15 +155,15 @@ class RolesAndPermissionsSeeder extends Seeder
             'ver reunions',
             'crear reunions',
             'editar reunions',
-            'ver profesor-clases',
-            'crear profesor-clases',
-            'editar profesor-clases',
+            'ver detalleregistroclases',
+            'crear detalleregistroclases',
+            'editar detalleregistroclases',
             'ver mallas',
             'crear mallas',
             'editar mallas',
-            'ver registrosde-clases',
-            'crear registrosde-clases',
-            'editar registrosde-clases',
+            'ver registroclases',
+            'crear registroclases',
+            'editar registroclases',
             'ver anotacions',
             'crear anotacions',
             'editar anotacions',
@@ -181,10 +181,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'ver cursos',
             'ver mallas',
             'ver asignaturas',
-            'ver registrosde-clases',
+            'ver registroclases',
             'ver anotacions',
             'ver evaluacions',
             'ver asistencias',
+            'ver detalleregistroclases',
         ]);
 
         $this->command->info('Roles y permisos asignados correctamente.');

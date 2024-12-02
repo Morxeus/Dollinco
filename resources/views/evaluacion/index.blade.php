@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header bg-secondary">
+                    <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
 
                             <span id="card_title">
@@ -36,9 +36,10 @@
                                     <tr>
                                         <th>No</th>
                                         
-									<th >Id evaluación</th>
-									<th >Fecha evaluacion</th>
-									<th >Nota</th>
+									<th >Idevaluacion</th>
+									<th >Nombreevaluacion</th>
+									<th >Descripcionevaluacion</th>
+									<th >Fechaevaluacion</th>
 
                                         <th></th>
                                     </tr>
@@ -48,14 +49,15 @@
                                         <tr>
                                             <td>{{ ++$i }}</td>
                                             
-										<td >{{ $evaluacion->IDEvaluacion }}</td>
+										<td >{{ $evaluacion->IdEvaluacion }}</td>
+										<td >{{ $evaluacion->NombreEvaluacion }}</td>
+										<td >{{ $evaluacion->DescripcionEvaluacion }}</td>
 										<td >{{ $evaluacion->FechaEvaluacion }}</td>
-										<td >{{ $evaluacion->Nota }}</td>
 
                                             <td>
-                                                <form action="{{ route('evaluacions.destroy', $evaluacion->IDEvaluacion) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('evaluacions.show', $evaluacion->IDEvaluacion) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('evaluacions.edit', $evaluacion->IDEvaluacion) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
+                                                <form action="{{ route('evaluacions.destroy', $evaluacion->id) }}" method="POST">
+                                                    <a class="btn btn-sm btn-primary " href="{{ route('evaluacions.show', $evaluacion->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('evaluacions.edit', $evaluacion->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>

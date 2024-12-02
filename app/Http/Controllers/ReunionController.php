@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReunionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use App\Models\ProfesorDirector;
 
 class ReunionController extends Controller
 {
@@ -29,9 +28,8 @@ class ReunionController extends Controller
     public function create(): View
     {
         $reunion = new Reunion();
-        $profesores = ProfesorDirector::all(); // Obtener todos los profesores
-    
-        return view('reunion.create', compact('reunion', 'profesores'));
+
+        return view('reunion.create', compact('reunion'));
     }
 
     /**
@@ -48,9 +46,9 @@ class ReunionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($IDReunion): View
+    public function show($id): View
     {
-        $reunion = Reunion::find($IDReunion);
+        $reunion = Reunion::find($id);
 
         return view('reunion.show', compact('reunion'));
     }
@@ -58,12 +56,11 @@ class ReunionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($IDReunion): View
+    public function edit($id): View
     {
-        $reunion = Reunion::find($IDReunion);
-        $profesores = ProfesorDirector::all();
+        $reunion = Reunion::find($id);
 
-        return view('reunion.edit', compact('reunion', 'profesores'));
+        return view('reunion.edit', compact('reunion'));
     }
 
     /**
@@ -77,9 +74,9 @@ class ReunionController extends Controller
             ->with('success', 'Reunion updated successfully');
     }
 
-    public function destroy($IDReunion): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
-        Reunion::find($IDReunion)->delete();
+        Reunion::find($id)->delete();
 
         return Redirect::route('reunions.index')
             ->with('success', 'Reunion deleted successfully');

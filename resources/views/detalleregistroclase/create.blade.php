@@ -1,24 +1,23 @@
 @extends('layouts.app')
 
 @section('template_title')
-    {{ __('Update') }} Profesor Clase
+    {{ __('Create') }} Detalleregistroclase
 @endsection
 
 @section('content')
     <section class="content container-fluid">
-        <div class="">
+        <div class="row">
             <div class="col-md-12">
 
                 <div class="card card-default">
                     <div class="card-header">
-                        <span class="card-title">{{ __('Update') }} Profesor Clase</span>
+                        <span class="card-title">{{ __('Create') }} Detalleregistroclase</span>
                     </div>
                     <div class="card-body bg-white">
-                        <form method="POST" action="{{ route('profesor-clases.update', $profesorClase->IDProfesorClase) }}"  role="form" enctype="multipart/form-data">
-                            {{ method_field('PATCH') }}
+                        <form method="POST" action="{{ route('detalleregistroclases.store') }}"  role="form" enctype="multipart/form-data">
                             @csrf
 
-                            @include('profesor-clase.form')
+                            @include('detalleregistroclase.form')
 
                         </form>
                     </div>

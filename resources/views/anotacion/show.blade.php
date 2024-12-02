@@ -22,19 +22,15 @@
                         
                                 <div class="form-group mb-2 mb20">
                                     <strong>Idanotacion:</strong>
-                                    {{ $anotacion->IDAnotacion }}
+                                    {{ $anotacion->IdAnotacion }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Tipoanotacion:</strong>
                                     {{ $anotacion->TipoAnotacion }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Fecha:</strong>
-                                    {{ $anotacion->Fecha }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Descripcion:</strong>
-                                    {{ $anotacion->Descripcion }}
+                                    <strong>Descripcionanotacion:</strong>
+                                    {{ $anotacion->DescripcionAnotacion }}
                                 </div>
 
                     </div>

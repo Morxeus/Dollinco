@@ -22,12 +22,9 @@ class ReunionApoderadoRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+			'IdReunionApoderado' => 'required',
 			'Asistencia' => 'required|string',
-			'HoraInicioReunionApoderado' => 'required',
-			'HoraFinReunionApoderado' => 'required',
 			'RunApoderado' => 'required|string',
-			'IDReunion' => 'required',
         ];
     }
 }

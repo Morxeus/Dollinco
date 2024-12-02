@@ -1,61 +1,39 @@
 <div class="row padding-1 p-1">
     <div class="col-md-12">
-        <div class="form-group mb-2 mb20">
-            <label for="i_d_curso_asignatura" class="form-label">{{ __('Idcursoasignatura') }}</label>
-            <input type="text" name="IDCursoAsignatura" class="form-control @error('IDCursoAsignatura') is-invalid @enderror" value="{{ old('IDCursoAsignatura', $malla?->IDCursoAsignatura) }}" id="i_d_curso_asignatura" placeholder="Idcursoasignatura">
-            {!! $errors->first('IDCursoAsignatura', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-
-        <div class="form-group mb-2 mb20">
-            <label for="i_d_curso" class="form-label">{{ __('Idcurso') }}</label>
-            <select name="IDCurso" class="form-control @error('IDCurso') is-invalid @enderror" id="i_d_curso">
-                <option value="">{{ __('Seleccione un curso') }}</option>
-                @foreach($cursos as $curso)
-                    <option value="{{ $curso->IDCurso }}" {{ old('IDCurso', $malla?->IDCurso) == $curso->IDCurso ? 'selected' : '' }}>
-                        {{ $curso->NombreCurso }}
-                    </option>
-                @endforeach
-            </select>
-            {!! $errors->first('IDCurso', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-
-        <div class="form-group mb-2 mb20">
-            <label class="form-label">{{ __('Asignaturas') }}</label>
-            <div class="d-flex flex-wrap">
-                @foreach($asignaturas as $asignatura)
-                    <div class="form-check mr-3 mb-2">
-                        <input type="checkbox" 
-                        name="IDAsignatura[]" 
-                        value="{{ $asignatura->IDAsignatura }}" 
-                        class="form-check-input @error('IDAsignatura') is-invalid @enderror" 
-                        id="asignatura_{{ $asignatura->IDAsignatura }}"
-                        {{ in_array($asignatura->IDAsignatura, $selectedAsignaturas) ? 'checked' : '' }}>
-                 
-                        <label class="form-check-label" for="asignatura_{{ $asignatura->IDAsignatura }}">
-                            {{ $asignatura->NombreAsignatura }}
-                        </label>
-                    </div>
-                @endforeach
-            </div>
-            {!! $errors->first('IDAsignatura', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
         
-
         <div class="form-group mb-2 mb20">
-            <label for="numero_matricula" class="form-label">{{ __('Número de Matrícula') }}</label>
-            <select name="NumeroMatricula" class="form-control @error('NumeroMatricula') is-invalid @enderror" id="numero_matricula">
-                <option value="">{{ __('Seleccione una matrícula') }}</option>
-                @foreach($matriculas as $matricula)
-                    <option value="{{ $matricula->NumeroMatricula }}" {{ old('NumeroMatricula', $malla?->NumeroMatricula) == $matricula->NumeroMatricula ? 'selected' : '' }}>
-                        {{ $matricula->NumeroMatricula }}
-                    </option>
-                @endforeach
-            </select>
+            <label for="id_malla" class="form-label">{{ __('Idmalla') }}</label>
+            <input type="text" name="IdMalla" class="form-control @error('IdMalla') is-invalid @enderror" value="{{ old('IdMalla', $malla?->IdMalla) }}" id="id_malla" placeholder="Idmalla">
+            {!! $errors->first('IdMalla', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+        </div>
+        <div class="form-group mb-2 mb20">
+            <label for="nombre_malla" class="form-label">{{ __('Nombremalla') }}</label>
+            <input type="text" name="NombreMalla" class="form-control @error('NombreMalla') is-invalid @enderror" value="{{ old('NombreMalla', $malla?->NombreMalla) }}" id="nombre_malla" placeholder="Nombremalla">
+            {!! $errors->first('NombreMalla', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+        </div>
+        <div class="form-group mb-2 mb20">
+            <label for="id_curso" class="form-label">{{ __('Idcurso') }}</label>
+            <input type="text" name="IdCurso" class="form-control @error('IdCurso') is-invalid @enderror" value="{{ old('IdCurso', $malla?->IdCurso) }}" id="id_curso" placeholder="Idcurso">
+            {!! $errors->first('IdCurso', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+        </div>
+        <div class="form-group mb-2 mb20">
+            <label for="id_asignatura" class="form-label">{{ __('Idasignatura') }}</label>
+            <input type="text" name="IdAsignatura" class="form-control @error('IdAsignatura') is-invalid @enderror" value="{{ old('IdAsignatura', $malla?->IdAsignatura) }}" id="id_asignatura" placeholder="Idasignatura">
+            {!! $errors->first('IdAsignatura', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+        </div>
+        <div class="form-group mb-2 mb20">
+            <label for="numero_matricula" class="form-label">{{ __('Numeromatricula') }}</label>
+            <input type="text" name="NumeroMatricula" class="form-control @error('NumeroMatricula') is-invalid @enderror" value="{{ old('NumeroMatricula', $malla?->NumeroMatricula) }}" id="numero_matricula" placeholder="Numeromatricula">
             {!! $errors->first('NumeroMatricula', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
-    </div>
+        <div class="form-group mb-2 mb20">
+            <label for="run_profesor" class="form-label">{{ __('Runprofesor') }}</label>
+            <input type="text" name="RunProfesor" class="form-control @error('RunProfesor') is-invalid @enderror" value="{{ old('RunProfesor', $malla?->RunProfesor) }}" id="run_profesor" placeholder="Runprofesor">
+            {!! $errors->first('RunProfesor', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+        </div>
 
+    </div>
     <div class="col-md-12 mt20 mt-2">
-        <button type="submit" class="btn btn-primary">{{ __('Guardar') }}</button>
+        <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
     </div>
 </div>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('template_title')
-    {{ $profesorClase->name ?? __('Show') . " " . __('Profesor Clase') }}
+    {{ $registroclase->name ?? __('Show') . " " . __('Registroclase') }}
 @endsection
 
 @section('content')
@@ -11,26 +11,30 @@
                 <div class="card">
                     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="float-left">
-                            <span class="card-title">{{ __('Show') }} Profesor Clase</span>
+                            <span class="card-title">{{ __('Show') }} Registroclase</span>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-primary btn-sm" href="{{ route('profesor-clases.index') }}"> {{ __('Back') }}</a>
+                            <a class="btn btn-primary btn-sm" href="{{ route('registroclases.index') }}"> {{ __('Back') }}</a>
                         </div>
                     </div>
 
                     <div class="card-body bg-white">
                         
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Idprofesorclase:</strong>
-                                    {{ $profesorClase->IDProfesorClase }}
+                                    <strong>Idregistroclases:</strong>
+                                    {{ $registroclase->IdRegistroClases }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Idregistrodeclase:</strong>
-                                    {{ $profesorClase->IDRegistrodeClase }}
+                                    <strong>Idmalla:</strong>
+                                    {{ $registroclase->IdMalla }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Runprofesor:</strong>
-                                    {{ $profesorClase->RunProfesor }}
+                                    <strong>Fechaclase:</strong>
+                                    {{ $registroclase->FechaClase }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Descripcionclase:</strong>
+                                    {{ $registroclase->DescripcionClase }}
                                 </div>
 
                     </div>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@hasanyrole('administrador|profesor')
+
 @section('template_title')
-    Profesor Clases
+    Detalleregistroclases
 @endsection
 
 @section('content')
@@ -9,15 +9,15 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header bg-secondary">
+                    <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
 
                             <span id="card_title">
-                                {{ __('Profesor Clases') }}
+                                {{ __('Detalleregistroclases') }}
                             </span>
 
                              <div class="float-right">
-                                <a href="{{ route('profesor-clases.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                <a href="{{ route('detalleregistroclases.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
                                   {{ __('Create New') }}
                                 </a>
                               </div>
@@ -36,31 +36,37 @@
                                     <tr>
                                         <th>No</th>
                                         
-									<th >Idprofesorclase</th>
-									<th >Idregistrodeclase</th>
-									<th >Runprofesor</th>
+									<th >Iddetalleregistroclase</th>
+									<th >Notaevaluacion</th>
+									<th >Idregistroclases</th>
+									<th >Numeromatricula</th>
+									<th >Idevaluacion</th>
+									<th >Idanotacion</th>
+									<th >Idasistencia</th>
 
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($profesorClases as $profesorClase)
+                                    @foreach ($detalleregistroclases as $detalleregistroclase)
                                         <tr>
                                             <td>{{ ++$i }}</td>
                                             
-										<td >{{ $profesorClase->IDProfesorClase }}</td>
-										<td >{{ $profesorClase->IDRegistrodeClase }}</td>
-										<td >{{ $profesorClase->RunProfesor }}</td>
+										<td >{{ $detalleregistroclase->IdDetalleRegistroClase }}</td>
+										<td >{{ $detalleregistroclase->NotaEvaluacion }}</td>
+										<td >{{ $detalleregistroclase->IdRegistroClases }}</td>
+										<td >{{ $detalleregistroclase->NumeroMatricula }}</td>
+										<td >{{ $detalleregistroclase->IdEvaluacion }}</td>
+										<td >{{ $detalleregistroclase->IdAnotacion }}</td>
+										<td >{{ $detalleregistroclase->IdAsistencia }}</td>
 
                                             <td>
-                                                <form action="{{ route('profesor-clases.destroy', $profesorClase->IDProfesorClase) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('profesor-clases.show', $profesorClase->IDProfesorClase) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('profesor-clases.edit', $profesorClase->IDProfesorClase) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
+                                                <form action="{{ route('detalleregistroclases.destroy', $detalleregistroclase->id) }}" method="POST">
+                                                    <a class="btn btn-sm btn-primary " href="{{ route('detalleregistroclases.show', $detalleregistroclase->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('detalleregistroclases.edit', $detalleregistroclase->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    @role('administador')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
-                                                    @endrole
                                                 </form>
                                             </td>
                                         </tr>
@@ -70,9 +76,8 @@
                         </div>
                     </div>
                 </div>
-                {!! $profesorClases->withQueryString()->links() !!}
+                {!! $detalleregistroclases->withQueryString()->links() !!}
             </div>
         </div>
     </div>
-    @endhasanyrole
 @endsection

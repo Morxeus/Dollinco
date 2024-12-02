@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reunion_apoderados', function (Blueprint $table) {
-            $table->id('IDReunionApoderado'); // AUTO_INCREMENT
-            $table->string('Asistencia', 10); // Asistencia a la reunión (puedes ajustar según tus necesidades)
-            $table->dateTime('HoraInicioReunionApoderado');
-            $table->dateTime('HoraFinReunionApoderado');
-            $table->string('RunApoderado', 12); // Referencia al Apoderado
-            $table->unsignedBigInteger("IDReunion"); // Referencia a Reunion
-        
-           // Definición de las claves foráneas 
-           $table -> foreign ('RunApoderado') -> references ('RunApoderado') -> on ('apoderados') -> onDelete ('cascade');
-           $table -> foreign ('IDReunion') -> references ('IDReunion') -> on ('reunions') -> onDelete ('cascade');
-        
-           $table -> timestamps ();
+            $table->id('IdReunionApoderado'); // AUTO_INCREMENT
+            $table->string('Asistencia', 50); // Asistencia del apoderado
+            $table->string('RunApoderado', 12); // Referencia a apoderado
+            $table->unsignedBigInteger('IdReunion')->nullable(); // Relación con reunión
+            $table->unsignedBigInteger('IdMalla')->nullable(); // Relación con malla
+    
+            // Claves foráneas
+            $table->foreign('RunApoderado')->references('RunApoderado')->on('apoderados')->onDelete('restrict');
+            $table->foreign('IdReunion')->references('IdReunion')->on('reunions')->onDelete('restrict');
+            $table->foreign('IdMalla')->references('IdMalla')->on('mallas')->onDelete('restrict');
+    
+            $table->timestamps();
 
         });
     }

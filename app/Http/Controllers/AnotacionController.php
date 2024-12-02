@@ -46,9 +46,9 @@ class AnotacionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($IDAnotacion): View
+    public function show($id): View
     {
-        $anotacion = Anotacion::find($IDAnotacion);
+        $anotacion = Anotacion::find($id);
 
         return view('anotacion.show', compact('anotacion'));
     }
@@ -56,9 +56,9 @@ class AnotacionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($IDAnotacion): View
+    public function edit($id): View
     {
-        $anotacion = Anotacion::find($IDAnotacion);
+        $anotacion = Anotacion::find($id);
 
         return view('anotacion.edit', compact('anotacion'));
     }
@@ -74,9 +74,9 @@ class AnotacionController extends Controller
             ->with('success', 'Anotacion updated successfully');
     }
 
-    public function destroy($IDAnotacion): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
-        Anotacion::find($IDAnotacion)->delete();
+        Anotacion::find($id)->delete();
 
         return Redirect::route('anotacions.index')
             ->with('success', 'Anotacion deleted successfully');

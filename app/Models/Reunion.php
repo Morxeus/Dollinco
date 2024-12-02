@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Reunion
  *
- * @property $IDReunion
+ * @property $IdReunion
  * @property $TipoReunion
+ * @property $FechaInicio
+ * @property $FechaFin
+ * @property $DescripcionReunion
  * @property $RunProfesor
- * @property $Fecha
  * @property $created_at
  * @property $updated_at
  *
@@ -21,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Reunion extends Model
 {
-    protected $primaryKey = 'IDReunion';
+    
     protected $perPage = 20;
 
     /**
@@ -29,7 +31,7 @@ class Reunion extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IDReunion', 'TipoReunion', 'RunProfesor', 'Fecha'];
+    protected $fillable = ['IdReunion', 'TipoReunion', 'FechaInicio', 'FechaFin', 'DescripcionReunion', 'RunProfesor'];
 
 
     /**
@@ -45,7 +47,7 @@ class Reunion extends Model
      */
     public function reunionApoderados()
     {
-        return $this->hasMany(\App\Models\ReunionApoderado::class, 'IDReunion', 'IDReunion');
+        return $this->hasMany(\App\Models\ReunionApoderado::class, 'IdReunion', 'IDReunion');
     }
     
 }

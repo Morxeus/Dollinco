@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Evaluacion
  *
- * @property $IDEvaluacion
+ * @property $IdEvaluacion
+ * @property $NombreEvaluacion
+ * @property $DescripcionEvaluacion
  * @property $FechaEvaluacion
- * @property $Nota
  * @property $created_at
  * @property $updated_at
  *
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Evaluacion extends Model
 {
-    protected $primaryKey = 'IDEvaluacion';
+    
     protected $perPage = 20;
 
     /**
@@ -27,7 +28,7 @@ class Evaluacion extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IDEvaluacion', 'FechaEvaluacion', 'Nota'];
+    protected $fillable = ['IdEvaluacion', 'NombreEvaluacion', 'DescripcionEvaluacion', 'FechaEvaluacion'];
 
 
     /**
@@ -35,7 +36,7 @@ class Evaluacion extends Model
      */
     public function registrosdeClases()
     {
-        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IDEvaluacion', 'IDEvaluacion');
+        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IdEvaluacion', 'IDEvaluacion');
     }
     
 }

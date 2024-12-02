@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('template_title')
-    Registrosde Clases
+    Registroclases
 @endsection
 
 @section('content')
@@ -9,15 +9,15 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header bg-secondary">
+                    <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
 
                             <span id="card_title">
-                                {{ __('Registrosde Clases') }}
+                                {{ __('Registroclases') }}
                             </span>
 
                              <div class="float-right">
-                                <a href="{{ route('registrosde-clases.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                <a href="{{ route('registroclases.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
                                   {{ __('Create New') }}
                                 </a>
                               </div>
@@ -36,32 +36,28 @@
                                     <tr>
                                         <th>No</th>
                                         
-									<th >Idregistrodeclase</th>
-									<th >Idcursoasignatura</th>
-									<th >Numeromatricula</th>
-									<th >Idevaluacion</th>
-									<th >Idasistencia</th>
-									<th >Idanotacion</th>
+									<th >Idregistroclases</th>
+									<th >Idmalla</th>
+									<th >Fechaclase</th>
+									<th >Descripcionclase</th>
 
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($registrosdeClases as $registrosdeClase)
+                                    @foreach ($registroclases as $registroclase)
                                         <tr>
                                             <td>{{ ++$i }}</td>
                                             
-										<td >{{ $registrosdeClase->IDRegistrodeClase }}</td>
-										<td >{{ $registrosdeClase->IDCursoAsignatura }}</td>
-										<td >{{ $registrosdeClase->NumeroMatricula }}</td>
-										<td >{{ $registrosdeClase->IDEvaluacion }}</td>
-										<td >{{ $registrosdeClase->IDAsistencia }}</td>
-										<td >{{ $registrosdeClase->IDAnotacion }}</td>
+										<td >{{ $registroclase->IdRegistroClases }}</td>
+										<td >{{ $registroclase->IdMalla }}</td>
+										<td >{{ $registroclase->FechaClase }}</td>
+										<td >{{ $registroclase->DescripcionClase }}</td>
 
                                             <td>
-                                                <form action="{{ route('registrosde-clases.destroy', $registrosdeClase->IDRegistrodeClase) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('registrosde-clases.show', $registrosdeClase->IDRegistrodeClase) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('registrosde-clases.edit', $registrosdeClase->IDRegistrodeClase) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
+                                                <form action="{{ route('registroclases.destroy', $registroclase->id) }}" method="POST">
+                                                    <a class="btn btn-sm btn-primary " href="{{ route('registroclases.show', $registroclase->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('registroclases.edit', $registroclase->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
@@ -74,7 +70,7 @@
                         </div>
                     </div>
                 </div>
-                {!! $registrosdeClases->withQueryString()->links() !!}
+                {!! $registroclases->withQueryString()->links() !!}
             </div>
         </div>
     </div>

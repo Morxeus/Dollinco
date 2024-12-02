@@ -22,15 +22,19 @@
                         
                                 <div class="form-group mb-2 mb20">
                                     <strong>Idevaluacion:</strong>
-                                    {{ $evaluacion->IDEvaluacion }}
+                                    {{ $evaluacion->IdEvaluacion }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Nombreevaluacion:</strong>
+                                    {{ $evaluacion->NombreEvaluacion }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Descripcionevaluacion:</strong>
+                                    {{ $evaluacion->DescripcionEvaluacion }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Fechaevaluacion:</strong>
                                     {{ $evaluacion->FechaEvaluacion }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Nota:</strong>
-                                    {{ $evaluacion->Nota }}
                                 </div>
 
                     </div>

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegistrosdeClaseRequest extends FormRequest
+class DetalleregistroclaseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,9 @@ class RegistrosdeClaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-
-			'IDCursoAsignatura' => 'required',
+			'IdDetalleRegistroClase' => 'required',
+			'IdRegistroClases' => 'required',
 			'NumeroMatricula' => 'required',
-			'IDEvaluacion' => 'required',
-			'IDAsistencia' => 'required',
-			'IDAnotacion' => 'required',
         ];
     }
 }

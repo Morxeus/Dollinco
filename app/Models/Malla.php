@@ -7,23 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Malla
  *
- * @property $IDCursoAsignatura
- * @property $IDCurso
- * @property $IDAsignatura
+ * @property $IdMalla
+ * @property $NombreMalla
+ * @property $IdCurso
+ * @property $IdAsignatura
  * @property $NumeroMatricula
+ * @property $RunProfesor
  * @property $created_at
  * @property $updated_at
  *
  * @property Asignatura $asignatura
  * @property Curso $curso
  * @property Matricula $matricula
+ * @property ProfesorDirector $profesorDirector
  * @property RegistrosdeClase[] $registrosdeClases
+ * @property ReunionApoderado[] $reunionApoderados
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Malla extends Model
 {
-    protected $primaryKey = 'IDCursoAsignatura';
+    
     protected $perPage = 20;
 
     /**
@@ -31,7 +35,7 @@ class Malla extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IDCursoAsignatura', 'IDCurso', 'IDAsignatura', 'NumeroMatricula'];
+    protected $fillable = ['IdMalla', 'NombreMalla', 'IdCurso', 'IdAsignatura', 'NumeroMatricula', 'RunProfesor'];
 
 
     /**
@@ -39,7 +43,7 @@ class Malla extends Model
      */
     public function asignatura()
     {
-        return $this->belongsTo(\App\Models\Asignatura::class, 'IDAsignatura', 'IDAsignatura');
+        return $this->belongsTo(\App\Models\Asignatura::class, 'IdAsignatura', 'IDAsignatura');
     }
     
     /**
@@ -47,7 +51,7 @@ class Malla extends Model
      */
     public function curso()
     {
-        return $this->belongsTo(\App\Models\Curso::class, 'IDCurso', 'IDCurso');
+        return $this->belongsTo(\App\Models\Curso::class, 'IdCurso', 'IDCurso');
     }
     
     /**
@@ -59,11 +63,27 @@ class Malla extends Model
     }
     
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function profesorDirector()
+    {
+        return $this->belongsTo(\App\Models\ProfesorDirector::class, 'RunProfesor', 'RunProfesor');
+    }
+    
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function registrosdeClases()
     {
-        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IDCursoAsignatura', 'IDCursoAsignatura');
+        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IdMalla', 'IdMalla');
+    }
+    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reunionApoderados()
+    {
+        return $this->hasMany(\App\Models\ReunionApoderado::class, 'IdMalla', 'IdMalla');
     }
     
 }

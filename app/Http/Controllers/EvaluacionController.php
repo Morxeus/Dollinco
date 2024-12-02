@@ -41,18 +41,14 @@ class EvaluacionController extends Controller
 
         return Redirect::route('evaluacions.index')
             ->with('success', 'Evaluacion created successfully.');
-            $request->merge([
-                'Nota' => str_replace(',', '.', $request->Nota),
-            
-            ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($IDEvaluacion): View
+    public function show($id): View
     {
-        $evaluacion = Evaluacion::find($IDEvaluacion);
+        $evaluacion = Evaluacion::find($id);
 
         return view('evaluacion.show', compact('evaluacion'));
     }
@@ -60,9 +56,9 @@ class EvaluacionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($IDEvaluacion): View
+    public function edit($id): View
     {
-        $evaluacion = Evaluacion::find($IDEvaluacion);
+        $evaluacion = Evaluacion::find($id);
 
         return view('evaluacion.edit', compact('evaluacion'));
     }
@@ -78,9 +74,9 @@ class EvaluacionController extends Controller
             ->with('success', 'Evaluacion updated successfully');
     }
 
-    public function destroy($IDEvaluacion): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
-        Evaluacion::find($IDEvaluacion)->delete();
+        Evaluacion::find($id)->delete();
 
         return Redirect::route('evaluacions.index')
             ->with('success', 'Evaluacion deleted successfully');

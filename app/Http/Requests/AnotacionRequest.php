@@ -22,11 +22,9 @@ class AnotacionRequest extends FormRequest
     public function rules(): array
     {
         return [
-
-            'TipoAnotacion' => 'required|string|in:Positiva,Positiva (Curso),Negativa,Negativa (Curso)',
-            'Fecha' => 'required|date',
-            'Descripcion' => 'required|string|max:500',
+			'IdAnotacion' => 'required',
+			'TipoAnotacion' => 'required|string',
+			'DescripcionAnotacion' => 'required|string',
         ];
     }
-    
 }

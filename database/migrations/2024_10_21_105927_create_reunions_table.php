@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reunions', function (Blueprint $table) {
-            $table->id('IDReunion'); // AUTO_INCREMENT
-            $table->char('TipoReunion', 1); // Tipo de reunión (puedes ajustar según tus necesidades)
-            $table->string('RunProfesor', 12); // Referencia al ProfesorDirector
-            $table->dateTime('Fecha');
-        
-            // Definición de la clave foránea
-            $table->foreign('RunProfesor')->references('RunProfesor')->on('profesor_directors')->onDelete('cascade');
-        
+            $table->id('IdReunion'); // AUTO_INCREMENT
+            $table->string('TipoReunion', 50); // Tipo de reunión
+            $table->dateTime('FechaInicio'); // Fecha y hora de inicio
+            $table->dateTime('FechaFin'); // Fecha y hora de fin
+            $table->string('DescripcionReunion', 255)->nullable(); // Descripción opcional
+            $table->string('RunProfesor', 12); // Referencia a profesor
+    
+            // Clave foránea
+            $table->foreign('RunProfesor')->references('RunProfesor')->on('profesor_directors')->onDelete('restrict');
+    
             $table->timestamps();
         });
     }

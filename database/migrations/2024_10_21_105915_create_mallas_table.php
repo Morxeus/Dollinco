@@ -12,16 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mallas', function (Blueprint $table) {
-            $table->id('IDCursoAsignatura'); // AUTO_INCREMENT
-            $table->unsignedBigInteger('IDCurso'); // Referencia a Curso
-            $table->unsignedBigInteger('IDAsignatura'); // Referencia a Asignatura
-            $table->unsignedBigInteger('NumeroMatricula');// Referencia a Mallas
-
+            $table->id('IdMalla'); // AUTO_INCREMENT
+            $table->string('NombreMalla', 50);
+            $table->unsignedBigInteger('IdCurso'); // Relación con el curso
+            $table->unsignedBigInteger('IdAsignatura'); // Relación con la asignatura
+            $table->unsignedBigInteger('NumeroMatricula'); // Relación con matrícula
+            $table->string('RunProfesor', 12); // Relación con el profesor
+    
             // Claves foráneas
-            $table->foreign('IDCurso')->references('IDCurso')->on('cursos')->onDelete('cascade');
-            $table->foreign('IDAsignatura')->references('IDAsignatura')->on('asignaturas')->onDelete('cascade');
-            $table->foreign('NumeroMatricula')->references('NumeroMatricula')->on('matriculas')->onDelete('cascade');
-
+            $table->foreign('IdCurso')->references('IdCurso')->on('cursos')->onDelete('restrict');
+            $table->foreign('IdAsignatura')->references('IdAsignatura')->on('asignaturas')->onDelete('restrict');
+            $table->foreign('NumeroMatricula')->references('NumeroMatricula')->on('matriculas')->onDelete('restrict');
+            $table->foreign('RunProfesor')->references('RunProfesor')->on('profesor_directors')->onDelete('restrict');
+    
             $table->timestamps();
 
         });

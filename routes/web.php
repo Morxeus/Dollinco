@@ -16,8 +16,8 @@ use App\Http\Controllers\ReunionController;
 use App\Http\Controllers\AnotacionController;
 use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\ReunionApoderadoController;
-use App\Http\Controllers\RegistrosdeClaseController;
-use App\Http\Controllers\ProfesorClaseController;
+use App\Http\Controllers\RegistroclaseController;
+use App\Http\Controllers\DetalleregistroclaseController;
 use App\Http\Controllers\MallaController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\PasswordController;
@@ -65,9 +65,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('reunion-apoderados', ReunionApoderadoController::class);
     Route::get('reunion-apoderados/apoderados/curso/{cursoId}', [ReunionApoderadoController::class, 'getApoderadosByCurso']);
-    Route::resource('registrosde-clases', RegistrosdeClaseController::class);
-    Route::resource('profesor-clases', ProfesorClaseController::class);
+    Route::resource('registroclases', RegistroclaseController::class);
     Route::resource('mallas', MallaController::class);
+    Route::resource('detalleregistroclases', DetalleregistroclaseController::class);
 
 
     Route::get('/listacurso', [ListarCursoController::class, 'index']);
