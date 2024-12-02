@@ -405,13 +405,13 @@ return [
                 'text' => 'Registro de Clases',
                 'url' => 'registroclases',
                 'icon' => 'far fa-fw fa-book',
-                'can' => 'registroclases',
+                'can' => 'ver registroclases', // Asegúrate de que el permiso coincida
             ],
             [
                 'text' => 'Detalle Registro Clase',
                 'url' => 'detalleregistroclases',
                 'icon' => 'far fa-fw fa-chalkboard-teacher',
-                'can' => 'detalleregistroclases',
+                'can' => 'ver detalleregistroclases', // Asegúrate de que el permiso coincida
             ],
         ],
     ],

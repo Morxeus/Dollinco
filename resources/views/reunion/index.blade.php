@@ -36,12 +36,12 @@
                                     <tr>
                                         <th>No</th>
                                         
-									<th >Idreunion</th>
-									<th >Tiporeunion</th>
-									<th >Fechainicio</th>
-									<th >Fechafin</th>
-									<th >Descripcionreunion</th>
-									<th >Runprofesor</th>
+									<th >Id reunion</th>
+									<th >Tipo reunion</th>
+									<th >Fecha inicio</th>
+									<th >Fecha fin</th>
+									<th >Descripcion reunion</th>
+									<th >Run profesor</th>
 
                                         <th></th>
                                     </tr>

@@ -36,11 +36,11 @@
                                     <tr>
                                         <th>No</th>
                                         
-									<th >Idreunionapoderado</th>
+									<th >Id reunion apoderado</th>
 									<th >Asistencia</th>
-									<th >Runapoderado</th>
-									<th >Idreunion</th>
-									<th >Idmalla</th>
+									<th >Run apoderado</th>
+									<th >Id reunion</th>
+									<th >Id malla</th>
 
                                         <th></th>
                                     </tr>
