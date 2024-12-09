@@ -24,6 +24,9 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\InformeNotasController;
 use App\Http\Controllers\ListarCursoController;
 Use App\Http\Controllers\RendimientoController;
+use App\Http\Controllers\CertificadoController;
+use App\Http\Controllers\ListaAnotacionesController;
+
 
 Auth::routes();
 Auth::routes(['reset' => true]);
@@ -38,10 +41,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 Route::get('/contacto', function () {
-    return view('contacto'); // Aquí va la vista que quieres mostrar
+    return view('contacto'); 
 })->name('contacto');
-
-
 
 Route::middleware(['auth'])->group(function () {
         
@@ -62,26 +63,33 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('reunions', ReunionController::class);
     Route::resource('anotacions', AnotacionController::class);
     Route::resource('matriculas', MatriculaController::class);
-
     Route::resource('reunion-apoderados', ReunionApoderadoController::class);
     Route::get('reunion-apoderados/apoderados/curso/{cursoId}', [ReunionApoderadoController::class, 'getApoderadosByCurso']);
     Route::resource('registroclases', RegistroclaseController::class);
     Route::resource('mallas', MallaController::class);
     Route::resource('detalleregistroclases', DetalleregistroclaseController::class);
-
-
     Route::get('/listacurso', [ListarCursoController::class, 'index']);
-
     Route::post('/rendimiento/consultar', [RendimientoController::class, 'consultarNotas'])->name('rendimiento.consultar');
-
     Route::get('/rendimiento', [RendimientoController::class, 'index'])->name('rendimiento.index');
     Route::post('/rendimiento/notas', [RendimientoController::class, 'consultarNotas'])->name('rendimiento.notas');
-
     Route::get('/informenotas', [InformeNotasController::class, 'generarInforme'])->name('informe-notas');
 
     //exportar notas
     Route::get('informe/notas-pdf', [InformeNotasController::class, 'verPDF'])->name('informe-notas.ver-pdf');
-    
+    Route::get('/reunion-apoderados/cursos/{idCurso}/apoderados', [ReunionApoderadoController::class, 'getApoderadosByCurso']);
+
+ // Ruta para mostrar el formulario de selección de certificado
+    Route::get('/certificados', [CertificadoController::class, 'index'])->name('certificados.index');
+    Route::post('/certificados/generar', [CertificadoController::class, 'generarCertificado'])->name('certificados.generar');
+    Route::get('/certificados/alumnos/{apoderado}', [CertificadoController::class, 'obtenerAlumnosPorApoderado']);
+    Route::get('/listacurso', [ListarCursoController::class, 'index']);
+    Route::get('/listacursos', [ListarCursoController::class, 'index'])->name('listacursos.index');
+    Route::post('/listacursos/filtrar', [ListarCursoController::class, 'filtrar'])->name('listacursos.filtrar');
+    Route::get('/anotaciones', [ListaAnotacionesController::class, 'index'])->name('anotaciones.index');
+
+    // Route::get('/reunion-apoderados/{id}/asistencia', [ReunionApoderadoController::class, 'asistencia'])->name('reunion-apoderados.asistencia');
+    // Route::post('/reunion-apoderados/{id}/asistencia', [ReunionApoderadoController::class, 'guardarAsistencia'])->name('reunion-apoderados.guardarAsistencia');
+
 
 });
 

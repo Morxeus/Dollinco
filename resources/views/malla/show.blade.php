@@ -1,53 +1,54 @@
 @extends('layouts.app')
 
 @section('template_title')
-    {{ $malla->name ?? __('Show') . " " . __('Malla') }}
+    {{ $malla->name ?? __('Mostrar Malla') }}
 @endsection
 
 @section('content')
-    <section class="content container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div class="float-left">
-                            <span class="card-title">{{ __('Show') }} Malla</span>
-                        </div>
-                        <div class="float-right">
-                            <a class="btn btn-primary btn-sm" href="{{ route('mallas.index') }}"> {{ __('Back') }}</a>
-                        </div>
+<section class="content container-fluid d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <div class="card shadow rounded">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex flex-column align-items-center">
+                        <h5 class="mb-3">Información de la Malla</h5>
+                        <a class="btn btn-sm btn-secondary" href="{{ route('mallas.index') }}">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
                     </div>
-
-                    <div class="card-body bg-white">
-                        
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Idmalla:</strong>
-                                    {{ $malla->IdMalla }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Nombremalla:</strong>
-                                    {{ $malla->NombreMalla }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Idcurso:</strong>
-                                    {{ $malla->IdCurso }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Idasignatura:</strong>
-                                    {{ $malla->IdAsignatura }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Numeromatricula:</strong>
-                                    {{ $malla->NumeroMatricula }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Runprofesor:</strong>
-                                    {{ $malla->RunProfesor }}
-                                </div>
-
-                    </div>
+                </div>
+                <div class="card-body bg-light">
+                    <table class="table table-bordered" style="background-color: #f7f7f7; color: #000;">
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="text-end">ID de la Malla:</th>
+                                <td>{{ $malla->IdMalla }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-end">Nombre de la Malla:</th>
+                                <td>{{ $malla->NombreMalla }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-end">ID del Curso:</th>
+                                <td>{{ $malla->IdCurso }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-end">ID de la Asignatura:</th>
+                                <td>{{ $malla->IdAsignatura }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-end">Número de Matrícula:</th>
+                                <td>{{ $malla->NumeroMatricula }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-end">RUT del Profesor:</th>
+                                <td>{{ $malla->RunProfesor }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection

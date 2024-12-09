@@ -2,11 +2,11 @@
     <div class="col-md-12">
 
         <div class="form-group">
-    <label for="NombreEstado">Estado</label>
+    <label for="NombreEstado">Estado *</label>
     <select name="NombreEstado" id="NombreEstado" class="form-control" required>
         <option value="">Seleccione un estado</option>
-        <option value="activo" {{ old('NombreEstado', $estado->NombreEstado ?? '') == 'activo' ? 'selected' : '' }}>Activo</option>
-        <option value="finalizado" {{ old('NombreEstado', $estado->NombreEstado ?? '') == 'finalizado' ? 'selected' : '' }}>Finalizado</option>
+        <option value="Activo" {{ old('NombreEstado', $estado->NombreEstado ?? '') == 'Activo' ? 'selected' : '' }}>Activo</option>
+        <option value="Finalizado" {{ old('NombreEstado', $estado->NombreEstado ?? '') == 'Finalizado' ? 'selected' : '' }}>Finalizado</option>
     </select>
     @error('NombreEstado')
         <span class="text-danger">{{ $message }}</span>

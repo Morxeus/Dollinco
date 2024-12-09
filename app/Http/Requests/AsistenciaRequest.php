@@ -21,9 +21,11 @@ class AsistenciaRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('IDAsistencia') ?? $this->route('asistencia'); // Asegurarte de capturar el parámetro correctamente
+    
         return [
-			'Fecha' => 'required|date',
-			'EstadoAsistencia' => 'required|string',
+            'EstadoAsistencia' => 'required|string|max:10|unique:asistencias,EstadoAsistencia,' . $id . ',IDAsistencia', // Excluye el registro actual
         ];
     }
+    
 }

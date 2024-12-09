@@ -27,12 +27,25 @@ class AlumnoController extends Controller
      */
     public function index(Request $request): View
     {
-        $alumnos = Alumno::paginate();
-
-        return view('alumno.index', compact('alumnos'))
-            ->with('i', ($request->input('page', 1) - 1) * $alumnos->perPage());
+        // Obtén el valor del filtro desde la solicitud
+        $runAlumno = $request->input('RunAlumno');
+        
+        // Filtra los registros si se proporciona un RunAlumno, de lo contrario, devuelve todos los alumnos
+        $query = Alumno::query();
+        if ($runAlumno) {
+            $query->where('RunAlumno', 'like', '%' . $runAlumno . '%');
+        }
+        
+        // Pagina los registros de alumnos con 10 elementos por página
+        $alumnos = $query->paginate(10);
+        
+        // Calcula el índice inicial según la página actual
+        $i = ($request->input('page', 1) - 1) * $alumnos->perPage();
+        
+        // Retorna la vista con los datos de alumnos y el índice inicial
+        return view('alumno.index', compact('alumnos', 'i', 'runAlumno'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -88,11 +101,28 @@ class AlumnoController extends Controller
 
     public function destroy($RunAlumno): RedirectResponse
     {
-        // Buscar alumno usando RunAlumno como clave primaria
-        $alumno = Alumno::findOrFail($RunAlumno);
-        $alumno->delete(); // Eliminar el alumno
+        try {
+            // Buscar alumno usando RunAlumno como clave primaria
+            $alumno = Alumno::findOrFail($RunAlumno);
     
-        return Redirect::route('alumnos.index')
-            ->with('success', 'Alumno eliminado correctamente');
+            // Verificar si el alumno tiene registros relacionados
+            if ($alumno->matriculas()->exists()) {
+                // Redirigir con un mensaje de error si hay registros relacionados
+                return Redirect::route('alumnos.index')
+                    ->with('error', 'No se puede eliminar el alumno porque tiene registros relacionados en la tabla de matrículas.');
+            }
+    
+            // Si no hay registros relacionados, eliminar el alumno
+            $alumno->delete();
+    
+            // Redirigir con un mensaje de éxito
+            return Redirect::route('alumnos.index')
+                ->with('success', 'Alumno eliminado correctamente.');
+        } catch (\Exception $e) {
+            // Manejar errores inesperados
+            return Redirect::route('alumnos.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el alumno.');
+        }
     }
+    
 }

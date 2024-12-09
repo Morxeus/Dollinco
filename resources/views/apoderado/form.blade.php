@@ -1,15 +1,15 @@
 <div class="row padding-1 p-1">
     <div class="col-md-12">
         <div class="form-group mb-2 mb20">
-            <label for="run_apoderado" class="form-label">{{ __('RunApoderado') }}</label>
+            <label for="run_apoderado" class="form-label">{{ __('Run Apoderado *') }}</label>
             @if (isset($apoderado) && $apoderado->exists)
                 <!-- Mostrar el campo como readonly si estamos editando -->
                 <input type="text" 
                        name="RunApoderado" 
                        class="form-control @error('RunApoderado') is-invalid @enderror" 
-                       value="{{ old('RunApoderado', $apoderado->RunApoderado) }}" 
+                       value="{{ old('Run Apoderado', $apoderado->RunApoderado) }}" 
                        id="run_apoderado" 
-                       placeholder="RunApoderado"
+                       placeholder="Run Apoderado"
                        readonly>
             @else
                 <!-- Campo editable si estamos creando -->
@@ -18,14 +18,14 @@
                        class="form-control @error('RunApoderado') is-invalid @enderror" 
                        value="{{ old('RunApoderado') }}" 
                        id="run_apoderado" 
-                       placeholder="RunApoderado">
+                       placeholder="Run Apoderado">
             @endif
             {!! $errors->first('RunApoderado', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
         
         
         <div class="form-group mb-2">
-            <label for="nombres">{{ __('Nombres') }}</label>
+            <label for="nombres">{{ __('Nombres *') }}</label>
             <input type="text" 
                    name="Nombres" 
                    class="form-control @error('Nombres') is-invalid @enderror" 
@@ -35,7 +35,7 @@
         </div>
 
         <div class="form-group mb-2">
-            <label for="apellidos">{{ __('Apellidos') }}</label>
+            <label for="apellidos">{{ __('Apellidos *') }}</label>
             <input type="text" 
                    name="Apellidos" 
                    class="form-control @error('Apellidos') is-invalid @enderror" 
@@ -45,7 +45,7 @@
         </div>
 
         <div class="form-group mb-2">
-            <label for="correo">{{ __('Correo') }}</label>
+            <label for="correo">{{ __('Correo *') }}</label>
             <input type="email" 
                    name="Correo" 
                    class="form-control @error('Correo') is-invalid @enderror" 
@@ -55,7 +55,7 @@
         </div>
 
         <div class="form-group mb-2">
-            <label for="telefono">{{ __('Teléfono') }}</label>
+            <label for="telefono">{{ __('Teléfono *') }}</label>
             <input type="text" 
                    name="Telefono" 
                    id="telefono" 
@@ -67,7 +67,7 @@
         
 
         <div class="form-group mb-2">
-            <label for="genero">{{ __('Género') }}</label>
+            <label for="genero">{{ __('Género *') }}</label>
             <select name="Genero" class="form-control @error('Genero') is-invalid @enderror">
                 <option value="" disabled {{ old('Genero', $apoderado?->Genero) ? '' : 'selected' }}>Seleccione un género</option>
                 <option value="M" {{ old('Genero', $apoderado?->Genero) === 'M' ? 'selected' : '' }}>Masculino</option>
@@ -78,7 +78,7 @@
         </div>
 
         <div class="form-group mb-2">
-            <label for="direccion">{{ __('Dirección') }}</label>
+            <label for="direccion">{{ __('Dirección *') }}</label>
             <input type="text" 
                    name="Direccion" 
                    class="form-control @error('Direccion') is-invalid @enderror" 

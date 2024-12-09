@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Asignatura
@@ -33,7 +34,7 @@ class Asignatura extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function cursoAsignaturas()
+    public function malla()
     {
         return $this->hasMany(\App\Models\Malla::class, 'IDAsignatura', 'IDAsignatura');
     }
@@ -44,6 +45,19 @@ class Asignatura extends Model
     public function matriculas()
     {
         return $this->hasMany(\App\Models\Matricula::class, 'IDAsignatura', 'IDAsignatura');
+    }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($asignatura) {
+            // Verificar si tiene relaciones en cursoAsignaturas o matriculas
+            if ($asignatura->malla()->exists() || $asignatura->malla()->exists()) {
+                throw new Exception("No se puede eliminar la asignatura porque tiene registros relacionados.");
+            }
+        });
     }
     
 }

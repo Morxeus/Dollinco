@@ -26,17 +26,18 @@ class AsignaturaRequest extends FormRequest
             'NombreAsignatura' => [
                 'required',
                 'string',
-                'in:Lenguaje y Comunicación,Matemática,Ciencias Naturales,Historia,Geografía y Ciencias Sociales,Educación Física y Salud,Artes Visuales,Música,Tecnología,Inglés,Religión',
+                'max:255', // Limita el tamaño del texto ingresado
                 function ($attribute, $value, $fail) {
+                    // Validar que no exista un registro duplicado en la tabla 'asignaturas'
                     $existe = DB::table('asignaturas')
                         ->where($attribute, $value)
                         ->exists();
 
                     if ($existe) {
-                        $fail("Ya existe un registro con la asignatura '{$value}'.");
+                        $fail("La asignatura '{$value}' ya está registrada.");
                     }
                 },
             ],
         ];
-    }   
+    }
 }

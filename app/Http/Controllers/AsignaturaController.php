@@ -16,7 +16,7 @@ class AsignaturaController extends Controller
      */
     public function index(Request $request): View
     {
-        $asignaturas = Asignatura::paginate();
+        $asignaturas = Asignatura::paginate(10);
 
         return view('asignatura.index', compact('asignaturas'))
             ->with('i', ($request->input('page', 1) - 1) * $asignaturas->perPage());
@@ -78,9 +78,24 @@ class AsignaturaController extends Controller
 
     public function destroy($IDAsignatura): RedirectResponse
     {
-        Asignatura::find($IDAsignatura)->delete();
-
-        return Redirect::route('asignaturas.index')
-            ->with('success', 'Asignatura eliminada con éxito');
+        try {
+            $asignatura = Asignatura::findOrFail($IDAsignatura);
+    
+            // Verificar si tiene relaciones en la tabla 'mallas'
+            if ($asignatura->malla()->exists()) {
+                return Redirect::route('asignaturas.index')
+                    ->with('error', 'No se puede eliminar la asignatura porque tiene registros relacionados en la tabla mallas.');
+            }
+    
+            // Eliminar la asignatura si no tiene relaciones
+            $asignatura->delete();
+    
+            return Redirect::route('asignaturas.index')
+                ->with('success', 'Asignatura eliminada exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('asignaturas.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar la asignatura: ' . $e->getMessage());
+        }
     }
+    
 }

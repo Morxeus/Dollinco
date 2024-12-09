@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Periodo
@@ -41,6 +42,20 @@ class Periodo extends Model
     public function estadoPeriodo()
     {
         return $this->belongsTo(\App\Models\EstadoPeriodo::class, 'IDPeriodoE', 'IDPeriodoE');
+    }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($periodo) {
+
+            if ($periodo->estadoPeriodo()->exists()) {
+                throw new Exception("No se puede eliminar el periodo porque tiene un estado relacionado.");
+            }
+
+        });
     }
     
 }

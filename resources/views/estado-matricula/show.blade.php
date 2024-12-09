@@ -1,37 +1,38 @@
 @extends('layouts.app')
 
 @section('template_title')
-    {{ $estadoMatricula->name ?? __('Show') . " " . __('Estado Matricula') }}
+    {{ $estadoMatricula->name ?? __('Mostrar Estado Matrícula') }}
 @endsection
 
 @section('content')
-    <section class="content container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div class="float-left">
-                            <span class="card-title">{{ __('Show') }} Estado Matricula</span>
-                        </div>
-                        <div class="float-right">
-                            <a class="btn btn-primary btn-sm" href="{{ route('estado-matriculas.index') }}"> {{ __('Back') }}</a>
-                        </div>
+<section class="content container-fluid d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <div class="card shadow rounded">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex flex-column align-items-center">
+                        <h5 class="mb-3">Información del Estado de la Matrícula</h5>
+                        <a class="btn btn-sm btn-secondary" href="{{ route('estado-matriculas.index') }}">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
                     </div>
-
-                    <div class="card-body bg-white">
-                        
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Idmatriculaestado:</strong>
-                                    {{ $estadoMatricula->IDMatriculaEstado }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Estadomatricula:</strong>
-                                    {{ $estadoMatricula->EstadoMatricula }}
-                                </div>
-
-                    </div>
+                </div>
+                <div class="card-body bg-light">
+                    <table class="table table-bordered" style="background-color: #f7f7f7; color: #000;">
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="text-end">ID del Estado Matrícula:</th>
+                                <td>{{ $estadoMatricula->IDMatriculaEstado }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-end">Estado de la Matrícula:</th>
+                                <td>{{ $estadoMatricula->EstadoMatricula }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Reunion
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Reunion extends Model
 {
-    
+    protected $primaryKey = 'IdReunion';
     protected $perPage = 20;
 
     /**
@@ -50,4 +51,18 @@ class Reunion extends Model
         return $this->hasMany(\App\Models\ReunionApoderado::class, 'IdReunion', 'IDReunion');
     }
     
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($reunion) {
+            // Verificar si hay relaciones en ReunionApoderado
+            if ($reunion->reunionApoderados()->exists()) {
+                throw new Exception("No se puede eliminar la reunión porque tiene registros relacionados en la tabla de ReunionApoderado.");
+            }
+        });
+    }
+
+
 }

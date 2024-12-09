@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 
 class EstadoMatriculaRequest extends FormRequest
 {
@@ -22,8 +23,21 @@ class EstadoMatriculaRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'IDMatriculaEstado' => 'required',
-			'EstadoMatricula' => 'required|string',
+            'EstadoMatricula' => [
+                'required',
+                'string',
+                'in:Confirmada,Pendiente,Rechazada,Anulada,Suspendida,Finalizada',
+                function ($attribute, $value, $fail) {
+                    $existe = DB::table('estado_matriculas')
+                        ->where($attribute, $value)
+                        ->exists();
+        
+                    if ($existe) {
+                        $fail("Ya existe un registro con el estado de matrÃ­cula '{$value}'.");
+                    }
+                },
+            ],
         ];
+        
     }
 }

@@ -2,39 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Curso;
-use app\Models\CursoOfrecido;
-
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB; // Para usar DB
 use Illuminate\Support\Collection; // Para manejar colecciones
-
-use Illuminate\Support\Facades\DB;  // Asegúrate de incluir DB
 
 class ListarCursoController extends Controller
 {
     public function index()
     {
+        // Obtener todos los cursos para el filtro
+        $cursos = DB::table('curso_ofrecidos')
+            ->join('cursos', 'curso_ofrecidos.IDCurso', '=', 'cursos.IDCurso')
+            ->select(DB::raw("CONCAT(cursos.NombreCurso, ' - ', curso_ofrecidos.Letra) AS CursoCompleto, curso_ofrecidos.IDCursoOfrecido"))
+            ->orderBy('CursoCompleto')
+            ->get();
+
+        return view('vistatemp.listacurso', compact('cursos'));
+    }
+
+    public function filtrar(Request $request)
+    {
+        $idCursoOfrecido = $request->input('IDCursoOfrecido');
+
         // Ejecutar la consulta SQL personalizada
         $resultados = DB::select("
-            SELECT cursos.NombreCurso AS Curso, alumnos.RunAlumno AS RUN, 
-            CONCAT(alumnos.Nombres, ' ', alumnos.Apellidos) AS NombreAlumno 
-            FROM alumnos 
-            INNER JOIN matriculas ON alumnos.RunAlumno = matriculas.RunAlumno 
-            INNER JOIN mallas ON matriculas.NumeroMatricula = mallas.NumeroMatricula 
-            INNER JOIN cursos ON mallas.IDCurso = cursos.IDCurso 
-            INNER JOIN curso_ofrecidos ON curso_ofrecidos.IDCurso = cursos.IDCurso 
-            ORDER BY cursos.NombreCurso, alumnos.Apellidos, alumnos.Nombres;
-            
-        ");
+            SELECT 
+                CONCAT(c.NombreCurso, ' - ', co.Letra) AS CursoCompleto,
+                a.RunAlumno AS RUN,
+                CONCAT(a.Nombres, ' ', a.Apellidos) AS NombreAlumno,
+                COUNT(DISTINCT m.NumeroMatricula) AS NumeroMatriculas,
+                co.Cupos,
+                (co.Cupos - COUNT(DISTINCT m.NumeroMatricula)) AS Disponibilidad
+            FROM 
+                curso_ofrecidos co
+            INNER JOIN cursos c ON co.IDCurso = c.IDCurso
+            LEFT JOIN mallas ma ON co.IDCurso = ma.IdCurso
+            LEFT JOIN matriculas m ON ma.NumeroMatricula = m.NumeroMatricula
+            LEFT JOIN alumnos a ON m.RunAlumno = a.RunAlumno
+            WHERE co.IDCursoOfrecido = ?
+            GROUP BY 
+                CursoCompleto, a.RunAlumno, a.Nombres, a.Apellidos, co.Cupos
+            ORDER BY 
+                CursoCompleto, a.Apellidos, a.Nombres;
+        ", [$idCursoOfrecido]);
 
         // Convertir el resultado a una colección de Laravel
         $resultados = collect($resultados);
 
-        // Retornar la vista con los resultados
-        return view('vistatemp.listacurso', compact('resultados'));
+        // Obtener todos los cursos para el filtro
+        $cursos = DB::table('curso_ofrecidos')
+            ->join('cursos', 'curso_ofrecidos.IDCurso', '=', 'cursos.IDCurso')
+            ->select(DB::raw("CONCAT(cursos.NombreCurso, ' - ', curso_ofrecidos.Letra) AS CursoCompleto, curso_ofrecidos.IDCursoOfrecido"))
+            ->orderBy('CursoCompleto')
+            ->get();
+
+        return view('vistatemp.listacurso', compact('resultados', 'cursos', 'idCursoOfrecido'));
     }
-    
 }

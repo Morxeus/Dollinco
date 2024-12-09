@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class EstadoMatricula
@@ -37,4 +38,16 @@ class EstadoMatricula extends Model
         return $this->hasMany(\App\Models\Matricula::class, 'IDMatriculaEstado', 'IDMatriculaEstado');
     }
     
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($estadoMatricula) {
+            // Verificar si tiene relaciones en la tabla matriculas
+            if ($estadoMatricula->matriculas()->exists()) {
+                throw new Exception("No se puede eliminar el EstadoMatricula porque tiene relación con otros campos.");
+            }
+        });
+    }
+
 }

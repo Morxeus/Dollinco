@@ -22,9 +22,10 @@ class AnotacionRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'IdAnotacion' => 'required',
+
 			'TipoAnotacion' => 'required|string',
 			'DescripcionAnotacion' => 'required|string',
+            'IdDetalleRegistroClase' => 'required'
         ];
     }
 }

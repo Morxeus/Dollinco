@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class EstadoMatriculaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra una lista de los recursos.
      */
     public function index(Request $request): View
     {
@@ -23,7 +23,7 @@ class EstadoMatriculaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo recurso.
      */
     public function create(): View
     {
@@ -33,18 +33,18 @@ class EstadoMatriculaController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena un recurso recién creado en la base de datos.
      */
     public function store(EstadoMatriculaRequest $request): RedirectResponse
     {
         EstadoMatricula::create($request->validated());
 
         return Redirect::route('estado-matriculas.index')
-            ->with('success', 'EstadoMatricula created successfully.');
+            ->with('success', 'Estado de matrícula creado exitosamente.');
     }
 
     /**
-     * Display the specified resource.
+     * Muestra el recurso especificado.
      */
     public function show($IDMatriculaEstado): View
     {
@@ -54,7 +54,7 @@ class EstadoMatriculaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar el recurso especificado.
      */
     public function edit($IDMatriculaEstado): View
     {
@@ -64,21 +64,37 @@ class EstadoMatriculaController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el recurso especificado en la base de datos.
      */
     public function update(EstadoMatriculaRequest $request, EstadoMatricula $estadoMatricula): RedirectResponse
     {
         $estadoMatricula->update($request->validated());
 
         return Redirect::route('estado-matriculas.index')
-            ->with('success', 'EstadoMatricula updated successfully');
+            ->with('success', 'Estado de matrícula actualizado exitosamente.');
     }
 
+    /**
+     * Elimina el recurso especificado de la base de datos.
+     */
     public function destroy($IDMatriculaEstado): RedirectResponse
     {
-        EstadoMatricula::find($IDMatriculaEstado)->delete();
+        try {
+            $estadoMatricula = EstadoMatricula::findOrFail($IDMatriculaEstado);
 
-        return Redirect::route('estado-matriculas.index')
-            ->with('success', 'EstadoMatricula deleted successfully');
+            // Verificar si tiene relaciones antes de eliminar
+            if ($estadoMatricula->matriculas()->exists()) {
+                return Redirect::route('estado-matriculas.index')
+                    ->with('error', 'No se puede eliminar el estado de matrícula porque tiene matrículas relacionadas.');
+            }
+
+            $estadoMatricula->delete();
+
+            return Redirect::route('estado-matriculas.index')
+                ->with('success', 'Estado de matrícula eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('estado-matriculas.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el estado de matrícula: ' . $e->getMessage());
+        }
     }
 }

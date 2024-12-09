@@ -298,173 +298,188 @@ return [
     |
     */
 'menu' => [
-
     [
         'text' => 'Cambiar Contraseña',
-        'url' => 'password/change', // URL del formulario de cambio de contraseña
-        'icon' => 'fas fa-key', // Ícono de llave
-        'topnav_user' => true, // Esto agrega la opción al UserMenu
+        'url' => 'password/change',
+        'icon' => 'fas fa-key',
+        'topnav_user' => true,
     ],
-    // Encabezado principal
-    ['header' => 'Menu'],
-
-    // Grupo: Personas
+    // Detalles Personales
     [
-        'text' => 'Personas',
-        'icon' => 'fas fa-fw fa-users',
+        'text' => 'Detalles Personales',
+        'icon' => 'fas fa-users',
         'submenu' => [
             [
                 'text' => 'Alumnos',
                 'url' => 'alumnos',
-                'icon' => 'fas fa-fw fa-user-graduate',
-                'can' => 'ver alumnos', // Solo se muestra si el usuario tiene el permiso
+                'icon' => 'fas fa-user-graduate',
+                'can' => 'ver alumnos',
             ],
             [
                 'text' => 'Apoderados',
                 'url' => 'apoderados',
-                'icon' => 'fas fa-fw fa-user-friends',
+                'icon' => 'fas fa-user-friends',
                 'can' => 'ver apoderados',
             ],
             [
                 'text' => 'Profesores',
                 'url' => 'profesor-directors',
-                'icon' => 'fas fa-fw fa-chalkboard-teacher',
+                'icon' => 'fas fa-chalkboard-teacher',
                 'can' => 'ver profesor-directors',
             ],
             [
                 'text' => 'Matrículas',
                 'url' => 'matriculas',
-                'icon' => 'far fa-fw fa-id-card',
+                'icon' => 'far fa-id-card',
                 'can' => 'ver matriculas',
             ],
-            [
-                'text' => 'Reuniones Apoderados',
-                'url' => 'reunion-apoderados',
-                'icon' => 'far fa-fw fa-handshake',
-                'can' => 'ver reunion-apoderados',
-            ],
         ],
     ],
-
-    // Grupo: Cursos
+    // Historial Académico
     [
-        'text' => 'Gestión de Cursos',
-        'icon' => 'fas fa-fw fa-book-open',
+        'text' => 'Historial Académico',
+        'icon' => 'fas fa-history', 
         'submenu' => [
-            [
-                'text' => 'Listado de Cursos',
-                'url' => 'cursos',
-                'icon' => 'far fa-fw fa-list-alt',
-                'can' => 'ver cursos',
-            ],
-            [
-                'text' => 'Cursos Ofrecidos',
-                'url' => 'curso-ofrecidos',
-                'icon' => 'far fa-fw fa-file-alt',
-                'can' => 'ver curso-ofrecidos',
-            ],
-            [
-                'text' => 'Malla',
-                'url' => 'mallas',
-                'icon' => 'far fa-fw fa-bookmark',
-                'can' => 'ver mallas',
-            ],
-        ],
-    ],
-
-    // Grupo: Clases
-    [
-        'text' => 'Gestión de Clases',
-        'icon' => 'fas fa-fw fa-chalkboard',
-        'submenu' => [
-            [
-                'text' => 'Reuniones',
-                'url' => 'reunions',
-                'icon' => 'far fa-fw fa-handshake',
-                'can' => 'ver reunions',
-            ],
             [
                 'text' => 'Evaluaciones',
                 'url' => 'evaluacions',
-                'icon' => 'far fa-fw fa-chart-line',
+                'icon' => 'fas fa-tasks', 
                 'can' => 'ver evaluacions',
             ],
             [
                 'text' => 'Asistencias',
                 'url' => 'asistencias',
-                'icon' => 'far fa-fw fa-check-square',
+                'icon' => 'fas fa-check-square', 
                 'can' => 'ver asistencias',
             ],
             [
                 'text' => 'Anotaciones',
                 'url' => 'anotacions',
-                'icon' => 'far fa-fw fa-clipboard',
+                'icon' => 'fas fa-clipboard', 
                 'can' => 'ver anotacions',
             ],
             [
                 'text' => 'Registro de Clases',
                 'url' => 'registroclases',
-                'icon' => 'far fa-fw fa-book',
-                'can' => 'ver registroclases', // Asegúrate de que el permiso coincida
+                'icon' => 'fas fa-book', 
+                'can' => 'ver registroclases',
             ],
             [
                 'text' => 'Detalle Registro Clase',
                 'url' => 'detalleregistroclases',
-                'icon' => 'far fa-fw fa-chalkboard-teacher',
-                'can' => 'ver detalleregistroclases', // Asegúrate de que el permiso coincida
+                'icon' => 'fas fa-chalkboard-teacher', 
+                'can' => 'ver detalleregistroclases',
             ],
         ],
     ],
-
-    // Grupo: Mantendores
+    
+    // Comunicación
     [
-        'text' => 'Mantendores',
-        'icon' => 'fas fa-fw fa-tools',
+        'text' => 'Comunicación',
+        'icon' => 'fas fa-comments',
+        'submenu' => [
+            [
+                'text' => 'Reuniones',
+                'url' => 'reunions',
+                'icon' => 'far fa-handshake',
+                'can' => 'ver reunions',
+            ],
+            [
+                'text' => 'Reuniones Apoderados',
+                'url' => 'reunion-apoderados',
+                'icon' => 'far fa-handshake',
+                'can' => 'ver reunion-apoderados',
+            ],
+        ],
+    ],
+    // Configuración Académica
+    [
+        'text' => 'Configuración Académica',
+        'icon' => 'fas fa-cogs',
         'submenu' => [
             [
                 'text' => 'Estado de Periodos',
                 'url' => 'estado-periodos',
-                'icon' => 'far fa-fw fa-check',
+                'icon' => 'fas fa-calendar-check',
                 'can' => 'ver estado-periodos',
-            ],
-            [
-                'text' => 'Periodos',
-                'url' => 'periodos',
-                'icon' => 'far fa-fw fa-calendar-alt',
-                'can' => 'ver periodos',
             ],
             [
                 'text' => 'Estado Matrículas',
                 'url' => 'estado-matriculas',
-                'icon' => 'far fa-fw fa-check-circle',
+                'icon' => 'far fa-check-circle',
                 'can' => 'ver estado-matriculas',
+            ],
+            [
+                'text' => 'Periodos',
+                'url' => 'periodos',
+                'icon' => 'far fa-calendar-alt',
+                'can' => 'ver periodos',
             ],
             [
                 'text' => 'Asignaturas',
                 'url' => 'asignaturas',
-                'icon' => 'fas fa-fw fa-book',
-                'can' => 'ver asignaturas',
-            ],
-            [
-                'text' => 'Lista curso',
-                'url' => 'listacurso',
-                'icon' => 'fas fa-fw fa-book',
-                'can' => 'ver asignaturas',
-            ],
-            [
-                'text' => 'Rendimiento',
-                'url' => 'rendimiento',
-                'icon' => 'fas fa-fw fa-book',
-                'can' => 'ver asignaturas',
-            ],
-            [
-                'text' => 'Informe de notas',
-                'url' => 'informenotas',
-                'icon' => 'fas fa-fw fa-book',
+                'icon' => 'fas fa-book',
                 'can' => 'ver asignaturas',
             ],
         ],
     ],
+    // Reportes
+    [
+        'text' => 'Reportes',
+        'icon' => 'fas fa-chart-pie',
+        'submenu' => [
+            [
+                'text' => 'Informe de Notas',
+                'url' => '/informenotas',
+                'icon' => 'fas fa-file-alt',
+
+            ],
+            [
+                'text' => 'Certificados',
+                'url' => '/certificados',
+                'icon' => 'fas fa-certificate',
+
+            ],
+        ],
+    ],
+    // Mis Cursos
+    [
+        'text' => 'Mis Cursos',
+        'icon' => 'fas fa-book-open',
+        'submenu' => [
+            [
+                'text' => 'Listado de Cursos',
+                'url' => 'cursos',
+                'icon' => 'far fa-list-alt',
+                'can' => 'ver cursos',
+            ],
+            [
+                'text' => 'Cursos Ofrecidos',
+                'url' => 'curso-ofrecidos',
+                'icon' => 'far fa-file-alt',
+                'can' => 'ver curso-ofrecidos',
+            ],
+            [
+                'text' => 'Malla',
+                'url' => 'mallas',
+                'icon' => 'far fa-bookmark',
+                'can' => 'ver mallas',
+            ],
+            [
+                'text' => 'Lista Alumnos',
+                'url' => '/listacurso',
+                'icon' => 'fas fa-book',
+                'can' => 'ver asignaturas',
+            ],
+            [
+                'text' => 'Lista Anotaciones',
+                'url' => '/anotaciones',
+                'icon' => 'fas fa-book',
+                'can' => 'ver asignaturas',
+            ],
+        ],
+    ],
+
 
     
 

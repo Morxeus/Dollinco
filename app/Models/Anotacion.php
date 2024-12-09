@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Anotacion
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Anotacion extends Model
 {
-    
+    protected $primaryKey = 'IdAnotacion';
     protected $perPage = 20;
 
     /**
@@ -27,15 +28,18 @@ class Anotacion extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IdAnotacion', 'TipoAnotacion', 'DescripcionAnotacion'];
+    
+     protected $fillable = ['IdAnotacion', 'TipoAnotacion', 'DescripcionAnotacion'];
 
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function registrosdeClases()
+    public function detalleRegistroClase()
     {
-        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IdAnotacion', 'IDAnotacion');
+        return $this->belongsTo(DetalleRegistroClase::class, 'IdDetalleRegistroClase', 'IdDetalleRegistroClase');
     }
+
+    
     
 }

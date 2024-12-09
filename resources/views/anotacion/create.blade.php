@@ -11,7 +11,7 @@
 
                 <div class="card card-default">
                     <div class="card-header">
-                        <span class="card-title">{{ __('Create') }} Anotacion</span>
+                        <span class="card-title">{{ __('Registrar') }} Anotacion</span>
                     </div>
                     <div class="card-body bg-white">
                         <form method="POST" action="{{ route('anotacions.store') }}"  role="form" enctype="multipart/form-data">

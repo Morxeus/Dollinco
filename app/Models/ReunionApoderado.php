@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class ReunionApoderado
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ReunionApoderado extends Model
 {
-    
+    protected $primaryKey = 'IdReunionApoderado';
     protected $perPage = 20;
 
     /**
@@ -31,7 +32,7 @@ class ReunionApoderado extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IdReunionApoderado', 'Asistencia', 'RunApoderado', 'IdReunion', 'IdMalla'];
+    protected $fillable = ['IdReunionApoderado', 'Asistencia', 'IdReunion', 'IdMalla'];
 
 
     /**
@@ -56,6 +57,19 @@ class ReunionApoderado extends Model
     public function apoderado()
     {
         return $this->belongsTo(\App\Models\Apoderado::class, 'RunApoderado', 'RunApoderado');
+    }
+    
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($reunionApoderado) {
+            // Verificar si hay relaciones adicionales que evitarían la eliminación
+            if ($reunionApoderado->reunion()->exists()) {
+                throw new Exception("No se puede eliminar este registro porque está relacionado con una reunión.");
+            }
+        });
     }
     
 }

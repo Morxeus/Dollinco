@@ -18,11 +18,24 @@ class ApoderadoController extends Controller
      */
     public function index(Request $request): View
     {
-        $apoderados = Apoderado::paginate();
-
-        return view('apoderado.index', compact('apoderados'))
-            ->with('i', ($request->input('page', 1) - 1) * $apoderados->perPage());
+        $runApoderado = $request->input('RunApoderado');
+    
+        // Consulta base
+        $query = Apoderado::query();
+    
+        // Aplica el filtro si se proporciona
+        if ($runApoderado) {
+            $query->where('RunApoderado', 'like', '%' . $runApoderado . '%');
+        }
+    
+        // Paginación
+        $apoderados = $query->paginate(10);
+    
+        $i = ($request->input('page', 1) - 1) * $apoderados->perPage();
+    
+        return view('apoderado.index', compact('apoderados', 'i', 'runApoderado'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -104,11 +117,25 @@ class ApoderadoController extends Controller
 
     public function destroy($RunApoderado): RedirectResponse
     {
-        Apoderado::find($RunApoderado)->delete();
-
-        return Redirect::route('apoderados.index')
-            ->with('success', 'Apoderado eliminado exitosamente');
+        try {
+            $apoderado = Apoderado::findOrFail($RunApoderado);
+    
+            // Verificar si tiene relaciones antes de eliminar
+            if ($apoderado->matriculas()->exists() || $apoderado->reunionApoderados()->exists()) {
+                return Redirect::route('apoderados.index')
+                    ->with('error', 'No se puede eliminar el apoderado porque tiene registros relacionados.');
+            }
+    
+            $apoderado->delete();
+    
+            return Redirect::route('apoderados.index')
+                ->with('success', 'Apoderado eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('apoderados.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el apoderado: ' . $e->getMessage());
+        }
     }
+    
     public function getApoderadosByCurso($cursoId)
     {
         // Obtiene los apoderados relacionados con el curso seleccionado

@@ -22,9 +22,11 @@ class DetalleregistroclaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'IdDetalleRegistroClase' => 'required',
-			'IdRegistroClases' => 'required',
-			'NumeroMatricula' => 'required',
+            'NotaEvaluacion' => 'nullable|numeric|min:1|max:7',
+            'IdRegistroClases' => 'required|exists:registroclases,IdRegistroClases',
+            'NumeroMatricula' => 'required|exists:matriculas,NumeroMatricula',
+            'Asistencias' => 'nullable|array',
+            'Asistencias.*' => 'boolean',
         ];
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class EvaluacionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra una lista de los recursos.
      */
     public function index(Request $request): View
     {
@@ -23,7 +23,7 @@ class EvaluacionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo recurso.
      */
     public function create(): View
     {
@@ -33,52 +33,55 @@ class EvaluacionController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena un recurso recién creado en la base de datos.
      */
     public function store(EvaluacionRequest $request): RedirectResponse
     {
         Evaluacion::create($request->validated());
 
         return Redirect::route('evaluacions.index')
-            ->with('success', 'Evaluacion created successfully.');
+            ->with('success', 'Evaluación creada exitosamente.');
     }
 
     /**
-     * Display the specified resource.
+     * Muestra el recurso especificado.
      */
-    public function show($id): View
+    public function show($IdEvaluacion): View
     {
-        $evaluacion = Evaluacion::find($id);
+        $evaluacion = Evaluacion::find($IdEvaluacion);
 
         return view('evaluacion.show', compact('evaluacion'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar el recurso especificado.
      */
-    public function edit($id): View
+    public function edit($IdEvaluacion): View
     {
-        $evaluacion = Evaluacion::find($id);
+        $evaluacion = Evaluacion::find($IdEvaluacion);
 
         return view('evaluacion.edit', compact('evaluacion'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el recurso especificado en la base de datos.
      */
     public function update(EvaluacionRequest $request, Evaluacion $evaluacion): RedirectResponse
     {
         $evaluacion->update($request->validated());
 
         return Redirect::route('evaluacions.index')
-            ->with('success', 'Evaluacion updated successfully');
+            ->with('success', 'Evaluación actualizada exitosamente.');
     }
 
-    public function destroy($id): RedirectResponse
+    /**
+     * Elimina el recurso especificado de la base de datos.
+     */
+    public function destroy($IdEvaluacion): RedirectResponse
     {
-        Evaluacion::find($id)->delete();
+        Evaluacion::find($IdEvaluacion)->delete();
 
         return Redirect::route('evaluacions.index')
-            ->with('success', 'Evaluacion deleted successfully');
+            ->with('success', 'Evaluación eliminada exitosamente.');
     }
 }

@@ -22,11 +22,28 @@ class MatriculaRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'NumeroMatricula' => 'required|unique:matriculas,NumeroMatricula',
+
 			'RunAlumno' => 'required|string|max:12',
 			'RunApoderado' => 'required|string|max:12',
-			'FechaInscripcion' => 'required|date',
+			'FechaInscripcion' => 'required|date|after_or_equal:today',
 			'IDMatriculaEstado' => 'required|numeric',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $fechaInscripcion = $this->input('FechaInscripcion');
+
+            if ($fechaInscripcion) {
+                $añoActual = now()->year;
+                $añoFecha = date('Y', strtotime($fechaInscripcion));
+
+                // Validar que el año no sea superior al año actual
+                if ($añoFecha > $añoActual) {
+                    $validator->errors()->add('FechaInscripcion', 'El año de la fecha de inscripción no puede ser superior al año actual.');
+                }
+            }
+        });
     }
 }

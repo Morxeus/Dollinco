@@ -9,11 +9,13 @@
         <div class="row">
             <div class="col-md-10 offset-md-1">
                 <div class="card shadow">
-                    <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
-                        <h5 class="card-title m-0">{{ __('Detalles de la Matrícula') }}</h5>
-                        <a class="btn btn-light btn-sm" href="{{ route('matriculas.index') }}">
-                            <i class="fas fa-arrow-left"></i> {{ __('Regresar') }}
-                        </a>
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex flex-column align-items-center">
+                            <h5 class="mb-3">Detalle Matrícula</h5>
+                            <a class="btn btn-sm btn-secondary" href="{{ route('profesor-directors.index') }}">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                        </div>
                     </div>
 
                     <div class="card-body bg-light">

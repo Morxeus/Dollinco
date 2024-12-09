@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('template_title')
-    {{ __('Update') }} Anotacion
+        {{ __('Update') }} Anotacion
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
                         <span class="card-title">{{ __('Update') }} Anotacion</span>
                     </div>
                     <div class="card-body bg-white">
-                        <form method="POST" action="{{ route('anotacions.update', $anotacion->id) }}"  role="form" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('anotacions.update', $anotacion->IdAnotacion) }}"  role="form" enctype="multipart/form-data">
                             {{ method_field('PATCH') }}
                             @csrf
 
@@ -27,3 +27,10 @@
         </div>
     </section>
 @endsection
+
+
+
+
+
+
+

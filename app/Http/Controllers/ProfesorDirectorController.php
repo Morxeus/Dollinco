@@ -14,18 +14,30 @@ use Illuminate\Support\Facades\Hash;
 class ProfesorDirectorController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra una lista de los recursos.
      */
     public function index(Request $request): View
     {
-        $profesorDirectors = ProfesorDirector::paginate();
+        // Obtén el valor del filtro
+        $runProfesor = $request->input('RunProfesor');
+
+        // Base de la consulta
+        $query = ProfesorDirector::query();
+
+        // Aplica el filtro si se proporciona un RunProfesor
+        if ($runProfesor) {
+            $query->where('RunProfesor', 'like', '%' . $runProfesor . '%');
+        }
+
+        // Paginación
+        $profesorDirectors = $query->paginate(10);
 
         return view('profesor-director.index', compact('profesorDirectors'))
             ->with('i', ($request->input('page', 1) - 1) * $profesorDirectors->perPage());
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo recurso.
      */
     public function create(): View
     {
@@ -35,41 +47,41 @@ class ProfesorDirectorController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena un recurso recién creado en la base de datos.
      */
     public function store(Request $request)
-{
-    // Validar los datos
-    $validated = $request->validate([
-        'RunProfesor' => 'required|string|unique:profesor_directors,RunProfesor|max:12',
-        'Nombres' => 'required|string|max:100',
-        'Apellidos' => 'required|string|max:100',
-        'Correo' => 'required|email|unique:profesor_directors,Correo|max:100',
-        'telefono' => 'nullable|string|max:15',
-    ]);
+    {
+        // Validar los datos
+        $validated = $request->validate([
+            'RunProfesor' => 'required|string|unique:profesor_directors,RunProfesor|max:12',
+            'Nombres' => 'required|string|max:100',
+            'Apellidos' => 'required|string|max:100',
+            'Correo' => 'required|email|unique:profesor_directors,Correo|max:100',
+            'telefono' => 'nullable|string|max:15',
+        ]);
 
-    // Crear profesor
-    $profesor = ProfesorDirector::create($validated);
+        // Crear profesor
+        $profesor = ProfesorDirector::create($validated);
 
-    // Crear usuario asociado
-    $user = User::create([
-        'name' => $profesor->Nombres . ' ' . $profesor->Apellidos,
-        'email' => $profesor->Correo,
-        'password' => Hash::make('password123'), // Contraseña predeterminada
-    ]);
+        // Crear usuario asociado
+        $user = User::create([
+            'name' => $profesor->Nombres . ' ' . $profesor->Apellidos,
+            'email' => $profesor->Correo,
+            'password' => Hash::make('password123'), // Contraseña predeterminada
+        ]);
 
-    // Relacionar el usuario con el profesor
-    $profesor->user_id = $user->id;
-    $profesor->save();
+        // Relacionar el usuario con el profesor
+        $profesor->user_id = $user->id;
+        $profesor->save();
 
-    // Asignar el rol de profesor
-    $user->assignRole('profesor');
+        // Asignar el rol de profesor
+        $user->assignRole('profesor');
 
-    return redirect()->route('profesor-directors.index')->with('success', 'Profesor creado y rol asignado.');
-}
+        return redirect()->route('profesor-directors.index')->with('success', 'Profesor creado y rol asignado correctamente.');
+    }
 
     /**
-     * Display the specified resource.
+     * Muestra el recurso especificado.
      */
     public function show($RunProfesor): View
     {
@@ -79,7 +91,7 @@ class ProfesorDirectorController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar el recurso especificado.
      */
     public function edit($RunProfesor): View
     {
@@ -89,23 +101,37 @@ class ProfesorDirectorController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el recurso especificado en la base de datos.
      */
     public function update(ProfesorDirectorRequest $request, ProfesorDirector $profesorDirector): RedirectResponse
     {
         $profesorDirector->update($request->validated());
 
         return Redirect::route('profesor-directors.index')
-            ->with('success', 'ProfesorDirector updated successfully');
+            ->with('success', 'Profesor actualizado correctamente.');
     }
 
+    /**
+     * Elimina el recurso especificado de la base de datos.
+     */
     public function destroy($RunProfesor): RedirectResponse
     {
-        $profesorDirector = ProfesorDirector::findOrFail($RunProfesor);
-        $profesorDirector->delete();
-    
-        return Redirect::route('profesor-directors.index')
-            ->with('success', 'ProfesorDirector deleted successfully');
+        try {
+            $profesorDirector = ProfesorDirector::findOrFail($RunProfesor);
+
+            // Verificar si tiene relaciones antes de eliminar
+            if ($profesorDirector->reunions()->exists()) {
+                return Redirect::route('profesor-directors.index')
+                    ->with('error', 'No se puede eliminar el profesor porque tiene reuniones relacionadas.');
+            }
+
+            $profesorDirector->delete();
+
+            return Redirect::route('profesor-directors.index')
+                ->with('success', 'Profesor eliminado correctamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('profesor-directors.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el profesor: ' . $e->getMessage());
+        }
     }
-    
 }

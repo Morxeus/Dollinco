@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Malla
@@ -27,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Malla extends Model
 {
-    
+    protected $primaryKey = 'IdMalla';
     protected $perPage = 20;
 
     /**
@@ -73,9 +74,9 @@ class Malla extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function registrosdeClases()
+    public function registrosClases()
     {
-        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IdMalla', 'IdMalla');
+        return $this->hasMany(\App\Models\RegistroClase::class, 'IdMalla', 'IdMalla');
     }
     
     /**
@@ -85,5 +86,27 @@ class Malla extends Model
     {
         return $this->hasMany(\App\Models\ReunionApoderado::class, 'IdMalla', 'IdMalla');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function matriculas()
+    {
+        return $this->hasMany(\App\Models\Matricula::class, 'NumeroMatricula', 'NumeroMatricula');
+    }
     
+
+    protected static function booted()
+    {
+        static::deleting(function ($malla) {
+            // Verificar si tiene registros relacionados en las tablas asociadas
+            if (
+                $malla->registrosClases()->exists() ||
+                $malla->reunionApoderados()->exists() ||
+                $malla->matriculas()->exists()
+            ) {
+                throw new Exception("No se puede eliminar la malla porque tiene registros relacionados en otras tablas.");
+            }
+        });
+    }
 }
