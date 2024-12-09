@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Alumno
@@ -41,6 +42,16 @@ class Alumno extends Model
     public function matriculas()
     {
         return $this->hasMany(\App\Models\Matricula::class, 'RunAlumno', 'RunAlumno');
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function ($alumno) {
+            // Verifica si tiene matrículas relacionadas
+            if ($alumno->matriculas()->exists()) {
+                throw new Exception("No se puede eliminar el alumno porque tiene registros relacionados en la tabla de matrículas.");
+            }
+        });
     }
     
 }

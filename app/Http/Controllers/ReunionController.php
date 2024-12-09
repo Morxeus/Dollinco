@@ -8,77 +8,97 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReunionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\ProfesorDirector;
 
 class ReunionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra una lista de los recursos.
      */
     public function index(Request $request): View
     {
-        $reunions = Reunion::paginate();
+        $reunions = Reunion::paginate(10);
 
         return view('reunion.index', compact('reunions'))
             ->with('i', ($request->input('page', 1) - 1) * $reunions->perPage());
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo recurso.
      */
     public function create(): View
     {
         $reunion = new Reunion();
+        $profesores = ProfesorDirector::all();
 
-        return view('reunion.create', compact('reunion'));
+        return view('reunion.create', compact('reunion', 'profesores'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena un recurso recién creado en la base de datos.
      */
     public function store(ReunionRequest $request): RedirectResponse
     {
         Reunion::create($request->validated());
 
         return Redirect::route('reunions.index')
-            ->with('success', 'Reunion created successfully.');
+            ->with('success', 'Reunión creada exitosamente.');
     }
 
     /**
-     * Display the specified resource.
+     * Muestra el recurso especificado.
      */
-    public function show($id): View
+    public function show($IdReunion): View
     {
-        $reunion = Reunion::find($id);
+        $reunion = Reunion::find($IdReunion);
+        $profesores = ProfesorDirector::all();
 
-        return view('reunion.show', compact('reunion'));
+        return view('reunion.show', compact('reunion', 'profesores'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar el recurso especificado.
      */
-    public function edit($id): View
+    public function edit($IdReunion): View
     {
-        $reunion = Reunion::find($id);
+        $reunion = Reunion::find($IdReunion);
+        $profesores = ProfesorDirector::all();
 
-        return view('reunion.edit', compact('reunion'));
+        return view('reunion.edit', compact('reunion', 'profesores'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el recurso especificado en la base de datos.
      */
     public function update(ReunionRequest $request, Reunion $reunion): RedirectResponse
     {
         $reunion->update($request->validated());
 
         return Redirect::route('reunions.index')
-            ->with('success', 'Reunion updated successfully');
+            ->with('success', 'Reunión actualizada exitosamente.');
     }
 
-    public function destroy($id): RedirectResponse
+    /**
+     * Elimina el recurso especificado de la base de datos.
+     */
+    public function destroy($IdReunion): RedirectResponse
     {
-        Reunion::find($id)->delete();
+        try {
+            $reunion = Reunion::findOrFail($IdReunion);
 
-        return Redirect::route('reunions.index')
-            ->with('success', 'Reunion deleted successfully');
+            // Verificar relaciones manualmente (opcional, si no se maneja en el modelo)
+            if ($reunion->reunionApoderados()->exists()) {
+                return Redirect::route('reunions.index')
+                    ->with('error', 'No se puede eliminar la reunión porque tiene registros relacionados en la tabla de ReunionApoderado.');
+            }
+
+            $reunion->delete();
+
+            return Redirect::route('reunions.index')
+                ->with('success', 'Reunión eliminada exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('reunions.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar la reunión: ' . $e->getMessage());
+        }
     }
 }

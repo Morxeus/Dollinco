@@ -1,18 +1,18 @@
 @extends('layouts.app')
+
 @hasanyrole('administrador|profesor|apoderado')
 @section('template_title')
     Lista de Alumnos
 @endsection
 
 @section('content')
-<div></div>
-    <div class="container-fluid mt-4"> <!-- Espacio desde arriba -->
+    <div class="container-fluid mt-4">
         <div class="row">
             <div class="col-sm-12">
-                <div class="card shadow-lg border-0 rounded"> <!-- Añadido sombreado y borde redondeado -->
+                <div class="card shadow-lg border-0 rounded">
                     <div class="card-header bg-dark text-white">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span id="card_title" class="h5" style="margin-left: 10px;"> <!-- Espacio de medio cm agregado aquí -->
+                            <span id="card_title" class="h5" style="margin-left: 10px;">
                                 {{ __('Lista de Alumnos') }}
                             </span>
                             @hasanyrole('administrador|profesor')
@@ -31,7 +31,42 @@
                         </div>
                     @endif
 
+                    @if($message = Session::get('error'))
+                        <div class="alert alert-danger m-4">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+
                     <div class="card-body bg-light">
+                        <!-- Formulario de filtro -->
+                        <form method="GET" action="{{ route('alumnos.index') }}" class="mb-4">
+                            <div class="d-flex justify-content-start align-items-center" style="gap: 20px;">
+                                <div>
+                                    <label for="RunAlumno" class="form-label font-weight-bold">{{ __('Filtrar por Run Alumno') }}</label>
+                                </div>
+                                <div>
+                                    <input 
+                                        type="text" 
+                                        name="RunAlumno" 
+                                        id="RunAlumno" 
+                                        class="form-control form-control-sm" 
+                                        value="{{ old('RunAlumno', $runAlumno) }}" 
+                                        placeholder="Ejemplo: 12345678-9">
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-search"></i> {{ __('Filtrar') }}
+                                    </button>
+                                </div>
+                                <div>
+                                    <a href="{{ route('alumnos.index') }}" class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-undo"></i> {{ __('Restablecer') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Tabla de alumnos -->
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped">
                                 <thead class="bg-secondary text-white">
@@ -47,15 +82,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($alumnos as $alumno)
-                                        <tr>
+                                    @forelse ($alumnos as $alumno)
+                                        <tr id="row-{{ $alumno->RunAlumno }}">
                                             <td class="text-center">{{ ++$i }}</td>
-                                            <td>{{ $alumno->RunAlumno }}</td>
-                                            <td>{{ $alumno->Nombres }}</td>
-                                            <td>{{ $alumno->Apellidos }}</td>
-                                            <td>{{ $alumno->FechaNacimiento }}</td>
-                                            <td>{{ $alumno->Genero }}</td>
-                                            <td>{{ $alumno->Direccion }}</td>
+                                            <td class="text-center">{{ $alumno->RunAlumno }}</td>
+                                            <td class="text-center">{{ $alumno->Nombres }}</td>
+                                            <td class="text-center">{{ $alumno->Apellidos }}</td>
+                                            <td class="text-center">{{ \Carbon\Carbon::parse($alumno->FechaNacimiento)->format('d-m-Y') }}</td>
+                                            <td class="text-center">
+                                                @if ($alumno->Genero === 'F')
+                                                    {{ __('Femenino') }}
+                                                @elseif ($alumno->Genero === 'M')
+                                                    {{ __('Masculino') }}
+                                                @else
+                                                    {{ __('Otro') }}
+                                                @endif
+                                            </td>
+                                            <td class="text-center">{{ $alumno->Direccion }}</td>
                                             <td class="text-center">
                                                 <div class="btn-group" role="group">
                                                     <button id="actionDropdown" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -65,57 +108,92 @@
                                                         <a class="dropdown-item text-primary" href="{{ route('alumnos.show', $alumno->RunAlumno) }}">
                                                             <i class="fa fa-fw fa-eye"></i> {{ __('Mostrar') }}
                                                         </a>
-                                                        @hasanyrole('administrador|profesro')
+                                                        @hasanyrole('administrador|profesor')
                                                         <a class="dropdown-item text-success" href="{{ route('alumnos.edit', $alumno->RunAlumno) }}">
                                                             <i class="fa fa-fw fa-edit"></i> {{ __('Editar') }}
                                                         </a>
                                                         @endhasanyrole
-                                                        <!-- Botón de eliminar solo visible para el rol de administrador -->
                                                         @role('administrador')
-                                                        <form action="{{ route('alumnos.destroy', $alumno->RunAlumno) }}" method="POST" style="display:inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-danger" onclick="return confirm('¿Estás seguro de eliminar?')">
-                                                                <i class="fa fa-fw fa-trash"></i> {{ __('Eliminar') }}
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" class="dropdown-item text-danger delete-button" data-id="{{ $alumno->RunAlumno }}">
+                                                            <i class="fa fa-fw fa-trash"></i> {{ __('Eliminar') }}
+                                                        </button>
                                                         @endrole
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="8" class="text-center">{{ __('No se encontraron alumnos.') }}</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
-                        <!-- Paginación solo si hay más de 20 registros -->
-                        @if ($alumnos->total() > 20)
-                            <div class="d-flex justify-content-center mt-3">
-                                {!! $alumnos->links() !!}
-                            </div>
-                        @endif
+
+                        <!-- Paginación -->
+                        <div class="d-flex justify-content-center mt-3">
+                            <ul class="pagination pagination-sm">
+                                {!! $alumnos->links('pagination::bootstrap-4') !!}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel">{{ __('Confirmar Eliminación') }}</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ __('¿Está seguro de que desea eliminar este alumno?') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                    <form id="deleteForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">{{ __('Eliminar') }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-button');
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            const deleteForm = document.getElementById('deleteForm');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const alumnoId = this.getAttribute('data-id');
+                    const row = document.getElementById(`row-${alumnoId}`);
+                    row.classList.add('table-danger');
+
+                    deleteForm.setAttribute('action', `/alumnos/${alumnoId}`);
+                    deleteModal.show();
+
+                    deleteModal._element.addEventListener('hidden.bs.modal', function () {
+                        row.classList.remove('table-danger');
+                    });
+                });
+            });
+        });
+    </script>
 
     <style>
-        .card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .table-bordered th, .table-bordered td {
-            border: 1px solid #dee2e6;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f9f9f9;
+        .table-danger {
+            background-color: #f8d7da !important;
         }
     </style>
 @endhasanyrole

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class EstadoPeriodo
@@ -39,6 +40,18 @@ class EstadoPeriodo extends Model
     public function periodos()
     {
         return $this->hasMany(\App\Models\Periodo::class, 'IDPeriodoE', 'IDPeriodoE');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($estadoPeriodo) {
+
+            if ($estadoPeriodo->periodos()->exists()) {
+                throw new Exception("No se puede eliminar el EstadoPeriodo porque tiene relaciones con otros campos.");
+            }
+        });
     }
     
 }

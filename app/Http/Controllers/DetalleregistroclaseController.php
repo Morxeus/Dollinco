@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\DetalleregistroclaseRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Matricula;
+use App\Models\Evaluacion;
+use App\Models\Registroclase;
+use App\Models\Asistencia;
+
 
 class DetalleregistroclaseController extends Controller
 {
@@ -16,39 +21,51 @@ class DetalleregistroclaseController extends Controller
      */
     public function index(Request $request): View
     {
-        $detalleregistroclases = Detalleregistroclase::paginate();
+        $detalleregistroclases = Detalleregistroclase::paginate(10);
 
         return view('detalleregistroclase.index', compact('detalleregistroclases'))
             ->with('i', ($request->input('page', 1) - 1) * $detalleregistroclases->perPage());
+    
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
-        $detalleregistroclase = new Detalleregistroclase();
-
-        return view('detalleregistroclase.create', compact('detalleregistroclase'));
+        // Cargar datos necesarios para la vista
+        $registroClases = RegistroClase::with(['malla.curso', 'malla.asignatura'])->get();
+        $evaluaciones = Evaluacion::all();
+        $alumnos = Matricula::with('alumno')->get();
+        $asistencias = Asistencia::all();
+    
+        return view('detalleregistroclase.create', compact('registroClases', 'evaluaciones', 'alumnos','asistencias'));
     }
-
+    
     /**
      * Store a newly created resource in storage.
      */
-    public function store(DetalleregistroclaseRequest $request): RedirectResponse
+    public function store(Request $request)
     {
-        Detalleregistroclase::create($request->validated());
-
-        return Redirect::route('detalleregistroclases.index')
-            ->with('success', 'Detalleregistroclase created successfully.');
+        $request->validate([
+            'IdRegistroClases' => 'required|exists:registroclases,IdRegistroClases',
+            'IdEvaluacion' => 'required|exists:evaluacions,IdEvaluacion',
+            'NumeroMatricula' => 'required|exists:matriculas,NumeroMatricula',
+            'NotaEvaluacion' => 'nullable|numeric|min:1|max:10',
+            'IdAsistencia' => 'nullable|exists:asistencias,IdAsistencia',
+        ]);
+    
+        Detalleregistroclase::create($request->all());
+    
+        return redirect()->route('detalleregistroclases.index')->with('success', 'Detalle de registro de clase guardado correctamente.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id): View
+    public function show($IdDetalleRegistroClase): View
     {
-        $detalleregistroclase = Detalleregistroclase::find($id);
+        $detalleregistroclase = Detalleregistroclase::find($IdDetalleRegistroClase);
 
         return view('detalleregistroclase.show', compact('detalleregistroclase'));
     }
@@ -56,9 +73,9 @@ class DetalleregistroclaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id): View
+    public function edit($IdDetalleRegistroClase): View
     {
-        $detalleregistroclase = Detalleregistroclase::find($id);
+        $detalleregistroclase = Detalleregistroclase::find($IdDetalleRegistroClase);
 
         return view('detalleregistroclase.edit', compact('detalleregistroclase'));
     }
@@ -74,11 +91,29 @@ class DetalleregistroclaseController extends Controller
             ->with('success', 'Detalleregistroclase updated successfully');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy($IdDetalleRegistroClase): RedirectResponse
     {
-        Detalleregistroclase::find($id)->delete();
-
-        return Redirect::route('detalleregistroclases.index')
-            ->with('success', 'Detalleregistroclase deleted successfully');
+        try {
+            $detalleRegistroClase = Detalleregistroclase::findOrFail($IdDetalleRegistroClase);
+    
+            // Verificar relaciones manualmente (opcional si no se maneja en el modelo)
+            if (
+                $detalleRegistroClase->anotacion()->exists() ||
+                $detalleRegistroClase->asistencia()->exists() ||
+                $detalleRegistroClase->evaluacion()->exists()
+            ) {
+                return Redirect::route('detalleregistroclases.index')
+                    ->with('error', 'No se puede eliminar el detalle del registro de clase porque tiene relaciones activas.');
+            }
+    
+            $detalleRegistroClase->delete();
+    
+            return Redirect::route('detalleregistroclases.index')
+                ->with('success', 'Detalle del registro de clase eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('detalleregistroclases.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el detalle del registro de clase: ' . $e->getMessage());
+        }
     }
+    
 }

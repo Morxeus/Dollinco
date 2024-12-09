@@ -13,7 +13,7 @@ use App\Models\EstadoPeriodo;
 class PeriodoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra una lista de los recursos.
      */
     public function index(Request $request): View
     {
@@ -24,28 +24,29 @@ class PeriodoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo recurso.
      */
     public function create(): View
     {
         $periodo = new Periodo();
         $estados = EstadoPeriodo::all(); // Obtener todos los registros de estado_periodos
-    
+
         return view('periodo.create', compact('periodo', 'estados'));
     }
+
     /**
-     * Store a newly created resource in storage.
+     * Almacena un recurso recién creado en la base de datos.
      */
     public function store(PeriodoRequest $request): RedirectResponse
     {
         Periodo::create($request->validated());
 
         return Redirect::route('periodos.index')
-            ->with('success', 'Periodo created successfully.');
+            ->with('success', 'Periodo creado exitosamente.');
     }
 
     /**
-     * Display the specified resource.
+     * Muestra el recurso especificado.
      */
     public function show($id): View
     {
@@ -55,32 +56,48 @@ class PeriodoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar el recurso especificado.
      */
     public function edit($id): View
     {
         $periodo = Periodo::find($id);
         $estados = EstadoPeriodo::all(); // Obtener todos los registros de estado_periodos
-    
+
         return view('periodo.edit', compact('periodo', 'estados'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el recurso especificado en la base de datos.
      */
     public function update(PeriodoRequest $request, Periodo $periodo): RedirectResponse
     {
         $periodo->update($request->validated());
 
         return Redirect::route('periodos.index')
-            ->with('success', 'Periodo updated successfully');
+            ->with('success', 'Periodo actualizado exitosamente.');
     }
 
+    /**
+     * Elimina el recurso especificado de la base de datos.
+     */
     public function destroy($id): RedirectResponse
     {
-        Periodo::find($id)->delete();
+        try {
+            $periodo = Periodo::findOrFail($id);
 
-        return Redirect::route('periodos.index')
-            ->with('success', 'Periodo deleted successfully');
+            // Verificar relaciones manualmente, si no se manejan en el modelo
+            if ($periodo->estadoPeriodo()->exists()) {
+                return Redirect::route('periodos.index')
+                    ->with('error', 'No se puede eliminar el periodo porque tiene un estado relacionado.');
+            }
+
+            $periodo->delete();
+
+            return Redirect::route('periodos.index')
+                ->with('success', 'Periodo eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('periodos.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el periodo: ' . $e->getMessage());
+        }
     }
 }

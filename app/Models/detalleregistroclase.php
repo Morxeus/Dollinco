@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Detalleregistroclase
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
 class Detalleregistroclase extends Model
 {
     
+    protected $primaryKey = 'IdDetalleRegistroClase';
     protected $perPage = 20;
 
     /**
@@ -35,7 +37,7 @@ class Detalleregistroclase extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IdDetalleRegistroClase', 'NotaEvaluacion', 'IdRegistroClases', 'NumeroMatricula', 'IdEvaluacion', 'IdAnotacion', 'IdAsistencia'];
+    protected $fillable = ['IdDetalleRegistroClase', 'NotaEvaluacion', 'IdRegistroClases', 'NumeroMatricula', 'IdEvaluacion', 'IdAsistencia'];
 
 
     /**
@@ -76,6 +78,21 @@ class Detalleregistroclase extends Model
     public function matricula()
     {
         return $this->belongsTo(\App\Models\Matricula::class, 'NumeroMatricula', 'NumeroMatricula');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($detalleregistroclase) {
+            if (
+                $detalleregistroclase->anotacion()->exists() ||
+                $detalleregistroclase->asistencia()->exists() ||
+                $detalleregistroclase->evaluacion()->exists()
+            ) {
+                throw new Exception("No se puede eliminar el detalle del registro de clase porque tiene relaciones con anotaciones, asistencias o evaluaciones.");
+            }
+        });
     }
     
 }

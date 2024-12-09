@@ -2,12 +2,19 @@
     <div class="col-md-12">
         
         <div class="form-group mb-2 mb20">
-            <label for="numero_matricula" class="form-label">{{ __('Numeromatricula') }}</label>
-            <input type="text" name="NumeroMatricula" class="form-control @error('NumeroMatricula') is-invalid @enderror" value="{{ old('NumeroMatricula', $matricula?->NumeroMatricula) }}" id="numero_matricula" placeholder="Numeromatricula">
+            <label for="numero_matricula" class="form-label">{{ __('Número de Matrícula ') }}</label>
+            <input type="text" 
+                   name="NumeroMatricula" 
+                   class="form-control @error('NumeroMatricula') is-invalid @enderror" 
+                   value="{{ old('NumeroMatricula', $matricula?->NumeroMatricula) }}" 
+                   id="numero_matricula" 
+                   placeholder="Número de Matrícula"
+                   readonly>
             {!! $errors->first('NumeroMatricula', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
+        
         <div class="form-group mb-2 mb20">
-            <label for="run_alumno" class="form-label">{{ __('Run del Alumno') }}</label>
+            <label for="run_alumno" class="form-label">{{ __('Run del Alumno *') }}</label>
             <select name="RunAlumno" class="form-control @error('RunAlumno') is-invalid @enderror" id="run_alumno">
                 <option value="">{{ __('Seleccione un alumno') }}</option>
                 @foreach($alumnos as $alumno)
@@ -20,7 +27,7 @@
         </div>
         
         <div class="form-group mb-2 mb20">
-            <label for="run_apoderado" class="form-label">{{ __('Run del Apoderado') }}</label>
+            <label for="run_apoderado" class="form-label">{{ __('Run del Apoderado *') }}</label>
             <select name="RunApoderado" class="form-control @error('RunApoderado') is-invalid @enderror" id="run_apoderado">
                 <option value="">{{ __('Seleccione un apoderado') }}</option>
                 @foreach($apoderados as $apoderado)
@@ -32,12 +39,12 @@
             {!! $errors->first('RunApoderado', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
         <div class="form-group mb-2 mb20">
-            <label for="fecha_inscripcion" class="form-label">{{ __('Fechainscripcion') }}</label>
-            <input type="date" name="FechaInscripcion" class="form-control @error('FechaInscripcion') is-invalid @enderror" value="{{ old('FechaInscripcion', $matricula?->FechaInscripcion) }}" id="fecha_inscripcion" placeholder="Fechainscripcion">
+            <label for="fecha_inscripcion" class="form-label">{{ __('Fecha de inscripción *') }}</label>
+            <input type="date" name="FechaInscripcion" class="form-control @error('FechaInscripcion') is-invalid @enderror" value="{{ old('FechaInscripcion', $matricula?->FechaInscripcion) }}" id="fecha_inscripcion" placeholder="Fecha inscripción">
             {!! $errors->first('FechaInscripcion', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
         <div class="form-group mb-2 mb20">
-            <label for="i_d_matricula_estado" class="form-label">{{ __('Estado de Matrícula') }}</label>
+            <label for="i_d_matricula_estado" class="form-label">{{ __('Estado de Matrícula *') }}</label>
             <select name="IDMatriculaEstado" class="form-control @error('IDMatriculaEstado') is-invalid @enderror" id="i_d_matricula_estado">
                 <option value="">{{ __('Seleccione un estado de matrícula') }}</option>
                 @foreach($estadoMatriculas as $estado)

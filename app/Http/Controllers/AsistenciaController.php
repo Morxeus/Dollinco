@@ -12,18 +12,18 @@ use Illuminate\View\View;
 class AsistenciaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra una lista de los recursos.
      */
     public function index(Request $request): View
     {
-        $asistencias = Asistencia::paginate();
+        $asistencias = Asistencia::paginate(10);
 
         return view('asistencia.index', compact('asistencias'))
             ->with('i', ($request->input('page', 1) - 1) * $asistencias->perPage());
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo recurso.
      */
     public function create(): View
     {
@@ -33,18 +33,18 @@ class AsistenciaController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena un recurso recién creado en la base de datos.
      */
     public function store(AsistenciaRequest $request): RedirectResponse
     {
         Asistencia::create($request->validated());
 
         return Redirect::route('asistencias.index')
-            ->with('success', 'Asistencia created successfully.');
+            ->with('success', 'Asistencia creada exitosamente.');
     }
 
     /**
-     * Display the specified resource.
+     * Muestra el recurso especificado.
      */
     public function show($IDAsistencia): View
     {
@@ -54,7 +54,7 @@ class AsistenciaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar el recurso especificado.
      */
     public function edit($IDAsistencia): View
     {
@@ -64,21 +64,39 @@ class AsistenciaController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el recurso especificado en la base de datos.
      */
-    public function update(AsistenciaRequest $request, Asistencia $asistencia): RedirectResponse
+    public function update(AsistenciaRequest $request, $IDAsistencia): RedirectResponse
     {
-        $asistencia->update($request->validated());
-
+        $asistencia = Asistencia::findOrFail($IDAsistencia); // Buscar asistencia
+        $asistencia->update($request->validated()); // Actualizar
+    
         return Redirect::route('asistencias.index')
-            ->with('success', 'Asistencia updated successfully');
+            ->with('success', 'Asistencia actualizada exitosamente.');
     }
 
+    /**
+     * Elimina el recurso especificado de la base de datos.
+     */
     public function destroy($IDAsistencia): RedirectResponse
     {
-        Asistencia::find($IDAsistencia)->delete();
-
-        return Redirect::route('asistencias.index')
-            ->with('success', 'Asistencia deleted successfully');
+        try {
+            $asistencia = Asistencia::findOrFail($IDAsistencia);
+    
+            // Verificar si tiene registros relacionados
+            if ($asistencia->detalleRegistroClases()->exists()) {
+                return Redirect::route('asistencias.index')
+                    ->with('error', 'No se puede eliminar la asistencia porque tiene registros relacionados en la tabla RegistrosdeClase.');
+            }
+    
+            $asistencia->delete();
+    
+            return Redirect::route('asistencias.index')
+                ->with('success', 'Asistencia eliminada exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('asistencias.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar la asistencia: ' . $e->getMessage());
+        }
     }
+    
 }

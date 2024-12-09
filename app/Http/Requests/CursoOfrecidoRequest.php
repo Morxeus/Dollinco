@@ -21,13 +21,30 @@ class CursoOfrecidoRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $id = $this->route('curso_ofrecido') ?? 'NULL'; // Obtén el ID si es edición
 
-			'Año' => 'required',
-			'IDCurso' => 'required',
-			'Letra' => 'required',
-			'Cupos' => 'required',
-			'IDPeriodo' => 'required',
+        return [
+            'Año' => 'required|date',
+            'IDCurso' => 'required|exists:cursos,IDCurso',
+            'Letra' => [
+                'required',
+                'string',
+                'max:1',
+                'regex:/^[A-Za-z]$/',
+                "unique:curso_ofrecidos,Letra,{$id},IDCursoOfrecido",
+            ],
+            'Cupos' => 'required|integer|min:1',
+            'IDPeriodo' => 'required|exists:periodos,IDPeriodo',
+        ];
+    }
+
+    /**
+     * Mensajes de error personalizados.
+     */
+    public function messages(): array
+    {
+        return [
+            'Letra.unique' => 'Ya existe un curso ofrecido con esta misma letra.',
         ];
     }
 }

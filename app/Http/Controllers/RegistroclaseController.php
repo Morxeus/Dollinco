@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Registroclase;
+use App\Models\Malla;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegistroclaseRequest;
@@ -16,7 +17,7 @@ class RegistroclaseController extends Controller
      */
     public function index(Request $request): View
     {
-        $registroclases = Registroclase::paginate();
+        $registroclases = Registroclase::paginate(10);
 
         return view('registroclase.index', compact('registroclases'))
             ->with('i', ($request->input('page', 1) - 1) * $registroclases->perPage());
@@ -27,9 +28,9 @@ class RegistroclaseController extends Controller
      */
     public function create(): View
     {
+        $mallas = Malla::with('asignatura')->get();
         $registroclase = new Registroclase();
-
-        return view('registroclase.create', compact('registroclase'));
+        return view('registroclase.create', compact('registroclase','mallas'));
     }
 
     /**
@@ -37,18 +38,24 @@ class RegistroclaseController extends Controller
      */
     public function store(RegistroclaseRequest $request): RedirectResponse
     {
-        Registroclase::create($request->validated());
-
-        return Redirect::route('registroclases.index')
-            ->with('success', 'Registroclase created successfully.');
+        // Crear el nuevo registro
+        $registroclase = Registroclase::create([
+            'IdMalla' => $request->validated('IdMalla'),
+            'FechaClase' => $request->validated('FechaClase'),
+            'DescripcionClase' => $request->validated('DescripcionClase'),
+        ]);
+    
+        // Redirigir a la vista 'show' con el 'IdRegistroClases'
+        return redirect()->route('registroclases.index', ['registroclase' => $registroclase->IdRegistroClases])
+                         ->with('success', 'Registro de la clase creada exitosamente.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id): View
+    public function show($IdRegistroClases): View
     {
-        $registroclase = Registroclase::find($id);
+        $registroclase = Registroclase::find($IdRegistroClases);
 
         return view('registroclase.show', compact('registroclase'));
     }
@@ -56,29 +63,52 @@ class RegistroclaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id): View
+    public function edit($IdRegistroClases): View
     {
-        $registroclase = Registroclase::find($id);
-
-        return view('registroclase.edit', compact('registroclase'));
+        // Obtener el registro existente con el ID proporcionado
+        $registroclase = Registroclase::findOrFail($IdRegistroClases);
+        
+        // Obtener todas las mallas disponibles
+        $mallas = Malla::all();
+    
+        // Devolver la vista de edición con el registro y las mallas
+        return view('registroclase.edit', compact('registroclase', 'mallas'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(RegistroclaseRequest $request, Registroclase $registroclase): RedirectResponse
     {
-        $registroclase->update($request->validated());
-
-        return Redirect::route('registroclases.index')
-            ->with('success', 'Registroclase updated successfully');
+        // Actualizar los campos del registroclase
+        $registroclase->update([
+            'IdMalla' => $request->validated('IdMalla'),  // Actualiza el IdMalla con el valor del formulario
+            'FechaClase' => $request->validated('FechaClase'),  // Actualiza la fecha de la clase
+            'DescripcionClase' => $request->validated('DescripcionClase'),  // Actualiza la descripción
+        ]);
+    
+        // Redirigir a la vista 'show' con un mensaje de éxito
+        return redirect()->route('registroclases.index', $registroclase->IdRegistroClases)
+                         ->with('success', 'Registro de la clase actualizado exitosamente.');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy($IdRegistroClases): RedirectResponse
     {
-        Registroclase::find($id)->delete();
-
-        return Redirect::route('registroclases.index')
-            ->with('success', 'Registroclase deleted successfully');
+        try {
+            $registroclase = Registroclase::findOrFail($IdRegistroClases);
+    
+            // Verificar manualmente relaciones (opcional, si no se maneja en el modelo)
+            if ($registroclase->malla()->exists()) {
+                return Redirect::route('registroclases.index')
+                    ->with('error', 'No se puede eliminar el registro de clase porque está relacionado con una malla.');
+            }
+    
+            $registroclase->delete();
+    
+            return Redirect::route('registroclases.index')
+                ->with('success', 'Registro de clase eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('registroclases.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el registro de clase: ' . $e->getMessage());
+        }
     }
+    
 }

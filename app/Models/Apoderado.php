@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Apoderado
@@ -52,6 +53,18 @@ class Apoderado extends Model
     public function reunionApoderados()
     {
         return $this->hasMany(\App\Models\ReunionApoderado::class, 'RunApoderado', 'RunApoderado');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($apoderado) {
+            // Verificar si tiene relaciones en matriculas o reunionApoderados
+            if ($apoderado->matriculas()->exists() || $apoderado->reunionApoderados()->exists()) {
+                throw new Exception("No se puede eliminar el apoderado porque tiene registros relacionados.");
+            }
+        });
     }
     
 }

@@ -26,7 +26,7 @@ class EstadoPeriodoRequest extends FormRequest
             'NombreEstado' => [
                 'required',
                 'string',
-                'in:activo,finalizado',
+                'in:Activo,Finalizado',
                 'max:50',
                 function ($attribute, $value, $fail) {
                     // Verificar si el valor ya existe en la base de datos

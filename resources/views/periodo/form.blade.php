@@ -3,17 +3,17 @@
         
 
         <div class="form-group mb-2 mb20">
-            <label for="fecha_inicio" class="form-label">{{ __('Fechainicio') }}</label>
+            <label for="fecha_inicio" class="form-label">{{ __('Fecha de inicio *') }}</label>
             <input type="date" name="FechaInicio" class="form-control @error('FechaInicio') is-invalid @enderror" value="{{ old('FechaInicio', $periodo?->FechaInicio) }}" id="fecha_inicio" placeholder="Fechainicio">
             {!! $errors->first('FechaInicio', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
         <div class="form-group mb-2 mb20">
-            <label for="fecha_fin" class="form-label">{{ __('Fechafin') }}</label>
+            <label for="fecha_fin" class="form-label">{{ __('Fecha de fin *') }}</label>
             <input type="date" name="FechaFin" class="form-control @error('FechaFin') is-invalid @enderror" value="{{ old('FechaFin', $periodo?->FechaFin) }}" id="fecha_fin" placeholder="Fechafin">
             {!! $errors->first('FechaFin', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
         <div class="form-group mb-2 mb20">
-            <label for="estado_periodo" class="form-label">{{ __('Estado del Periodo') }}</label>
+            <label for="estado_periodo" class="form-label">{{ __('Estado del Periodo *') }}</label>
             <select name="IDPeriodoE" class="form-control @error('IDPeriodoE') is-invalid @enderror" id="estado_periodo">
                 <option value="">{{ __('Seleccione un estado') }}</option>
                 @foreach($estados as $estado)

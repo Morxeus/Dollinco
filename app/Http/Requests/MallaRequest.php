@@ -3,6 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Curso;
+use App\Models\Asignatura;
+use App\Models\Matricula;
+use App\Models\ProfesorDirector;
 
 class MallaRequest extends FormRequest
 {
@@ -22,12 +26,31 @@ class MallaRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'IdMalla' => 'required',
-			'NombreMalla' => 'required|string',
-			'IdCurso' => 'required',
-			'IdAsignatura' => 'required',
-			'NumeroMatricula' => 'required',
-			'RunProfesor' => 'required|string',
+            'NombreMalla' => ['required', 'string', 'max:50'],
+            'IdCurso' => ['required', 'exists:cursos,IdCurso'],
+            'IdAsignatura' => ['required', 'array'],
+            'IdAsignatura.*' => ['exists:asignaturas,IDAsignatura'],
+            'NumeroMatricula' => ['required', 'exists:matriculas,NumeroMatricula'],
+            'RunProfesor' => ['required', 'exists:profesor_directors,RunProfesor'],
         ];
     }
-}
+
+    /**
+     * Cargar los datos relacionados (Cursos, Asignaturas, Matrículas y Profesores) para usarlos en el controlador.
+     */
+    public function loadRelatedData()
+    {
+        // Obtener todos los cursos
+        $cursos = Curso::all();
+
+        // Obtener todas las asignaturas
+        $asignaturas = Asignatura::all();
+
+        // Obtener todas las matrículas
+        $matriculas = Matricula::all();
+
+        // Obtener todos los profesores
+        $profesores = ProfesorDirector::all();
+
+        return compact('cursos', 'asignaturas', 'matriculas', 'profesores');
+    }}

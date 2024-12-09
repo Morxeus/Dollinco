@@ -1,34 +1,51 @@
 <div class="row padding-1 p-1">
     <div class="col-md-12">
         
+
         <div class="form-group mb-2 mb20">
-            <label for="id_reunion" class="form-label">{{ __('Id reunión') }}</label>
-            <input type="text" name="IdReunion" class="form-control @error('IdReunion') is-invalid @enderror" value="{{ old('IdReunion', $reunion?->IdReunion) }}" id="id_reunion" placeholder="Idreunion">
-            {!! $errors->first('IdReunion', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="tipo_reunion" class="form-label">{{ __('Tipo reunión') }}</label>
-            <input type="text" name="TipoReunion" class="form-control @error('TipoReunion') is-invalid @enderror" value="{{ old('TipoReunion', $reunion?->TipoReunion) }}" id="tipo_reunion" placeholder="Tiporeunion">
+            <label for="tipo_reunion" class="form-label">{{ __('Tipo de Reunión *') }}</label>
+            <select name="TipoReunion" id="tipo_reunion" class="form-control @error('TipoReunion') is-invalid @enderror">
+                <option value="General" {{ old('TipoReunion', $reunion?->TipoReunion) == 'General' ? 'selected' : '' }}>General</option>
+                <option value="Específica" {{ old('TipoReunion', $reunion?->TipoReunion) == 'Específica' ? 'selected' : '' }}>Específica</option>
+            </select>
             {!! $errors->first('TipoReunion', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
         <div class="form-group mb-2 mb20">
-            <label for="fecha_inicio" class="form-label">{{ __('Fecha inicio') }}</label>
-            <input type="date" name="FechaInicio" class="form-control @error('FechaInicio') is-invalid @enderror" value="{{ old('FechaInicio', $reunion?->FechaInicio) }}" id="fecha_inicio" placeholder="Fechainicio">
+            <label for="fecha_inicio" class="form-label">{{ __('Fecha y hora de inicio *') }}</label>
+            <input type="datetime-local" name="FechaInicio" 
+                   class="form-control @error('FechaInicio') is-invalid @enderror" 
+                   value="{{ old('FechaInicio', optional($reunion->FechaInicio)->format('Y-m-d\TH:i')) }}" 
+                   id="fecha_inicio">
             {!! $errors->first('FechaInicio', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
+        
         <div class="form-group mb-2 mb20">
-            <label for="fecha_fin" class="form-label">{{ __('Fechafin') }}</label>
-            <input type="date" name="FechaFin" class="form-control @error('Fecha Fin') is-invalid @enderror" value="{{ old('FechaFin', $reunion?->FechaFin) }}" id="fecha_fin" placeholder="Fechafin">
+            <label for="fecha_fin" class="form-label">{{ __('Fecha y hora de fin *') }}</label>
+            <input type="datetime-local" name="FechaFin" 
+                   class="form-control @error('FechaFin') is-invalid @enderror" 
+                   value="{{ old('FechaFin', optional($reunion->FechaFin)->format('Y-m-d\TH:i')) }}" 
+                   id="fecha_fin">
             {!! $errors->first('FechaFin', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
         <div class="form-group mb-2 mb20">
-            <label for="descripcion_reunion" class="form-label">{{ __('Descripcion reunión') }}</label>
-            <input type="text" name="DescripcionReunion" class="form-control @error('DescripcionReunion') is-invalid @enderror" value="{{ old('DescripcionReunion', $reunion?->DescripcionReunion) }}" id="descripcion_reunion" placeholder="Descripcionreunion">
+            <label for="descripcion_reunion" class="form-label">{{ __('Descripción reunión') }}</label>
+            <textarea name="DescripcionReunion" 
+                      class="form-control @error('DescripcionReunion') is-invalid @enderror" 
+                      id="descripcion_reunion" 
+                      rows="4" 
+                      placeholder="Descripción de la reunión">{{ old('DescripcionReunion', $reunion?->DescripcionReunion) }}</textarea>
             {!! $errors->first('DescripcionReunion', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
         <div class="form-group mb-2 mb20">
-            <label for="run_profesor" class="form-label">{{ __('Run profesor') }}</label>
-            <input type="text" name="RunProfesor" class="form-control @error('RunProfesor') is-invalid @enderror" value="{{ old('RunProfesor', $reunion?->RunProfesor) }}" id="run_profesor" placeholder="Runprofesor">
+            <label for="run_profesor" class="form-label">{{ __('Run Profesor *') }}</label>
+            <select name="RunProfesor" class="form-control @error('RunProfesor') is-invalid @enderror" id="run_profesor">
+                <option value="">{{ __('Seleccione un profesor') }}</option>
+                @foreach($profesores as $profesor)
+                    <option value="{{ $profesor->RunProfesor }}" {{ old('RunProfesor', $reunion?->RunProfesor) == $profesor->RunProfesor ? 'selected' : '' }}>
+                        {{ $profesor->Nombres }} {{ $profesor->Apellidos }}
+                    </option>
+                @endforeach
+            </select>
             {!! $errors->first('RunProfesor', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
 

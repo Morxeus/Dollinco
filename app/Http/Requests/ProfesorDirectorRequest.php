@@ -40,8 +40,13 @@ class ProfesorDirectorRequest extends FormRequest
             'Correo' => [
                 'required',
                 'max:150',
-                'email',
-                Rule::unique('profesor_directors', 'Correo')->ignore($this->route('profesorDirector')),
+                'email', 
+                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/',
+                function ($attribute, $value, $fail) {
+                    if (!$this->isValidEmail($value)) {
+                        $fail('El :attribute no es válido. Solo se permiten correos de dominios autorizados.');
+                    }
+                },
             ],
             'telefono' => 'nullable|string|max:15',
         ];

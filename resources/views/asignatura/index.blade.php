@@ -1,74 +1,147 @@
 @extends('layouts.app')
 
+@hasanyrole('administrador|profesor|apoderado')
 @section('template_title')
-    Asignaturas
+    Lista de Asignaturas
 @endsection
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid mt-4"> <!-- Espacio desde arriba -->
         <div class="row">
             <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header bg-secondary">
+                <div class="card shadow-lg border-0 rounded"> <!-- Añadido sombreado y borde redondeado -->
+                    <div class="card-header bg-dark text-white">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-
-                            <span id="card_title">
+                            <span id="card_title" class="h5" style="margin-left: 10px;"> <!-- Espacio de medio cm agregado aquí -->
                                 {{ __('Lista de Asignaturas') }}
                             </span>
-
-                             <div class="float-right">
-                                <a href="{{ route('asignaturas.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Crear Nuevo') }}
+                            @hasanyrole('administrador|profesor')
+                            <div class="float-right">
+                                <a href="{{ route('asignaturas.create') }}" class="btn btn-primary btn-sm" data-placement="left">
+                                    {{ __('Crear Nuevo') }}
                                 </a>
-                              </div>
+                            </div>
+                            @endhasanyrole
                         </div>
                     </div>
+                    
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success m-4">
                             <p>{{ $message }}</p>
                         </div>
                     @endif
+                    @if($message = Session::get('error'))
+                    <div class="alert alert-danger m-4">
+                        <p>{{ $message }}</p>
+                    </div>
+                    @endif
 
-                    <div class="card-body bg-white">
+                    <div class="card-body bg-light">
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
+                            <table class="table table-hover table-bordered table-striped">
+                                <thead class="bg-secondary text-white">
                                     <tr>
-                                        <th>No</th>
-                                        
-									<th >Id Asignatura</th>
-									<th >Nombre Asignatura</th>
-                                    <th >Acciones</th>
-
-                                        <th></th>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">Nombre de la Asignatura</th>
+                                        <th class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($asignaturas as $asignatura)
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
-                                            
-										<td >{{ $asignatura->IDAsignatura }}</td>
-										<td >{{ $asignatura->NombreAsignatura }}</td>
-
-                                            <td>
-                                                <form action="{{ route('asignaturas.destroy', $asignatura->IDAsignatura) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('asignaturas.show', $asignatura->IDAsignatura) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Mostrar') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('asignaturas.edit', $asignatura->IDAsignatura) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Editar') }}</a>
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Eliminar') }}</button>
-                                                </form>
+                                        <tr id="row-{{ $asignatura->IDAsignatura }}">
+                                            <td class="text-center">{{ ++$i }}</td>
+                                            <td class="text-center">{{ $asignatura->NombreAsignatura }}</td>
+                                            <td class="text-center">
+                                                <div class="btn-group" role="group">
+                                                    <button id="actionDropdown" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        {{ __('Acciones') }}
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="actionDropdown">
+                                                        <a class="dropdown-item text-primary" href="{{ route('asignaturas.show', $asignatura->IDAsignatura) }}">
+                                                            <i class="fa fa-fw fa-eye"></i> {{ __('Mostrar') }}
+                                                        </a>
+                                                        @hasanyrole('administrador|profesor')
+                                                        <a class="dropdown-item text-success" href="{{ route('asignaturas.edit', $asignatura->IDAsignatura) }}">
+                                                            <i class="fa fa-fw fa-edit"></i> {{ __('Editar') }}
+                                                        </a>
+                                                        @endhasanyrole
+                                                        @role('administrador')
+                                                        <button type="button" class="dropdown-item text-danger delete-button" data-id="{{ $asignatura->IDAsignatura }}">
+                                                            <i class="fa fa-fw fa-trash"></i> {{ __('Eliminar') }}
+                                                        </button>
+                                                        @endrole
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
+                        <!-- Paginación con botones pequeños -->
+                        <div class="d-flex justify-content-center mt-3">
+                            <ul class="pagination pagination-sm">
+                                {!! $asignaturas->links('pagination::bootstrap-4') !!}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                {!! $asignaturas->withQueryString()->links() !!}
             </div>
         </div>
     </div>
+
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel">{{ __('Confirmar Eliminación') }}</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ __('¿Está seguro de que desea eliminar esta asignatura?') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                    <form id="deleteForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">{{ __('Eliminar') }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-button');
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            const deleteForm = document.getElementById('deleteForm');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const asignaturaId = this.getAttribute('data-id');
+                    const row = document.getElementById(`row-${asignaturaId}`);
+                    row.classList.add('table-danger');
+
+                    deleteForm.setAttribute('action', `/asignaturas/${asignaturaId}`);
+                    deleteModal.show();
+
+                    deleteModal._element.addEventListener('hidden.bs.modal', function () {
+                        row.classList.remove('table-danger');
+                    });
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .table-danger {
+            background-color: #f8d7da !important;
+        }
+    </style>
+@endhasanyrole
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Asistencia
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $created_at
  * @property $updated_at
  *
- * @property RegistrosdeClase[] $registrosdeClases
+ * @property DetalleRegistroClase[] $detalleRegistroClases
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
@@ -27,15 +28,29 @@ class Asistencia extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['IDAsistencia', 'Fecha', 'EstadoAsistencia'];
+    protected $fillable = ['IDAsistencia', 'EstadoAsistencia'];
 
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function registrosdeClases()
+    public function detalleRegistroClases()
     {
-        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IDAsistencia', 'IDAsistencia');
+        return $this->hasMany(DetalleRegistroClase::class, 'IdAsistencia', 'IDAsistencia');
+    }
+
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($asistencia) {
+            // Verificar si hay relaciones con registrosdeClases
+            if ($asistencia->detalleRegistroClases()->exists()) {
+                throw new Exception("No se puede eliminar la asistencia porque tiene registros relacionados en la tabla RegistrosdeClase.");
+            }
+        });
     }
     
 }

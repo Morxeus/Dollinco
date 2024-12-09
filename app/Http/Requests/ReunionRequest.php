@@ -22,12 +22,25 @@ class ReunionRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'IdReunion' => 'required',
-			'TipoReunion' => 'required|string',
-			'FechaInicio' => 'required',
-			'FechaFin' => 'required',
-			'DescripcionReunion' => 'string',
-			'RunProfesor' => 'required|string',
+            'TipoReunion' => 'required.',
+            'FechaInicio' => 'required|date_format:Y-m-d\TH:i', // Validación para datetime-local
+            'FechaFin' => 'required|date_format:Y-m-d\TH:i',   // Validación para datetime-local
+            'DescripcionReunion' => 'nullable|string|max:255',
+            'RunProfesor' => 'required',
         ];
+    }
+    
+    protected function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            // Convertir las fechas al formato de Carbon
+            $fechaInicio = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $this->FechaInicio);
+            $fechaFin = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $this->FechaFin);
+    
+            // Validar que la fecha (sin hora) sea igual
+            if ($fechaInicio->toDateString() !== $fechaFin->toDateString()) {
+                $validator->errors()->add('FechaFin', 'La fecha de inicio debe ser igual a la fecha de fin. Solo puede variar la hora.');
+            }
+        });
     }
 }

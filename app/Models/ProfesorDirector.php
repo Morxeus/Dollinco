@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Exception;
 /**
  * Class ProfesorDirector
  *
@@ -39,10 +39,10 @@ class ProfesorDirector extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function profesorClases()
-    {
-        return $this->hasMany(\App\Models\ProfesorClase::class, 'RunProfesor', 'RunProfesor');
-    }
+    // public function profesorClases()
+    // {
+    //     return $this->hasMany(\App\Models\ProfesorClase::class, 'RunProfesor', 'RunProfesor');
+    // }
     
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -52,4 +52,15 @@ class ProfesorDirector extends Model
         return $this->hasMany(\App\Models\Reunion::class, 'RunProfesor', 'RunProfesor');
     }
     
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($profesorDirector) {
+            // Verificar si tiene relaciones en la tabla reunions
+            if ($profesorDirector->reunions()->exists()) {
+                throw new Exception("No se puede eliminar el ProfesorDirector porque tiene relaciones con otros campos.");
+            }
+        });
+    }
 }

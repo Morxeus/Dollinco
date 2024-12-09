@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Malla;
 
 class RegistroclaseRequest extends FormRequest
 {
@@ -22,10 +22,18 @@ class RegistroclaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'IdRegistroClases' => 'required',
-			'IdMalla' => 'required',
-			'FechaClase' => 'required',
-			'DescripcionClase' => 'string',
+            'IdMalla' =>  ['required', 'exists:mallas,IdMalla'],
+            'FechaClase' => ['required', 'date'],
+            'DescripcionClase' =>  ['required', 'string', 'max:255'], 
         ];
+    }
+    
+
+    public function loadRelatedData()
+    {
+        // Obtener todos los cursos
+        $mallas = Malla::all();
+
+        return compact('mallas');
     }
 }

@@ -18,7 +18,7 @@ class CursoOfrecidoController extends Controller
      */
     public function index(Request $request): View
     {
-        $cursoOfrecidos = CursoOfrecido::paginate();
+        $cursoOfrecidos = CursoOfrecido::with(['curso', 'periodo'])->paginate(10);
 
         return view('curso-ofrecido.index', compact('cursoOfrecidos'))
             ->with('i', ($request->input('page', 1) - 1) * $cursoOfrecidos->perPage());
@@ -44,7 +44,7 @@ class CursoOfrecidoController extends Controller
         CursoOfrecido::create($request->validated());
 
         return Redirect::route('curso-ofrecidos.index')
-            ->with('success', 'CursoOfrecido created successfully.');
+            ->with('success', 'Curso ofrecido creado exitosamente.');
     }
 
     /**
@@ -77,14 +77,28 @@ class CursoOfrecidoController extends Controller
         $cursoOfrecido->update($request->validated());
 
         return Redirect::route('curso-ofrecidos.index')
-            ->with('success', 'CursoOfrecido updated successfully');
+            ->with('success', 'Curso ofrecido actualizado exitosamente.');
     }
 
     public function destroy($IDCursoOfrecido): RedirectResponse
     {
-        CursoOfrecido::find($IDCursoOfrecido)->delete();
-
-        return Redirect::route('curso-ofrecidos.index')
-            ->with('success', 'CursoOfrecido deleted successfully');
+        try {
+            $cursoOfrecido = CursoOfrecido::findOrFail($IDCursoOfrecido);
+    
+            // Verificar manualmente las relaciones (opcional, si no se maneja en el modelo)
+            if ($cursoOfrecido->curso()->exists() || $cursoOfrecido->periodo()->exists()) {
+                return Redirect::route('curso-ofrecidos.index')
+                    ->with('error', 'No se puede eliminar el CursoOfrecido porque tiene relaciones con Curso o Periodo.');
+            }
+    
+            $cursoOfrecido->delete();
+    
+            return Redirect::route('curso-ofrecidos.index')
+                ->with('success', 'Curso ofrecido eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('curso-ofrecidos.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el CursoOfrecido: ' . $e->getMessage());
+        }
     }
+    
 }

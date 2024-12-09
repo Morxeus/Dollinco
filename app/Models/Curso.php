@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Curso
@@ -55,5 +56,30 @@ class Curso extends Model
     {
         return $this->hasMany(\App\Models\Matricula::class, 'IDCurso', 'IDCurso');
     }
-    
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+        public function mallas()
+    {
+        return $this->hasMany(\App\Models\Malla::class, 'IdCurso', 'IDCurso');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($curso) {
+            // Verificar si hay relaciones en cursoAsignaturas, cursoOfrecidos, matriculas o mallas
+            if (
+                $curso->cursoAsignaturas()->exists() ||
+                $curso->cursoOfrecidos()->exists() ||
+                $curso->matriculas()->exists() ||
+                $curso->mallas()->exists()
+            ) {
+                throw new Exception("No se puede eliminar el curso porque tiene registros relacionados en otras tablas.");
+            }
+        });
+    }
+
 }

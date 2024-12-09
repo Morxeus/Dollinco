@@ -22,10 +22,9 @@ class EvaluacionRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'IdEvaluacion' => 'required',
+
 			'NombreEvaluacion' => 'required|string',
-			'DescripcionEvaluacion' => 'string',
-			'FechaEvaluacion' => 'required',
+			'DescripcionEvaluacion' => 'nullable|string|max:255',
+			'FechaEvaluacion' => 'required|date',
         ];
-    }
-}
+    }}

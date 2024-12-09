@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Evaluacion
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Evaluacion extends Model
 {
-    
+    protected $primaryKey = 'IdEvaluacion';
     protected $perPage = 20;
 
     /**
@@ -31,12 +32,12 @@ class Evaluacion extends Model
     protected $fillable = ['IdEvaluacion', 'NombreEvaluacion', 'DescripcionEvaluacion', 'FechaEvaluacion'];
 
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function registrosdeClases()
-    {
-        return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IdEvaluacion', 'IDEvaluacion');
-    }
+    // /**
+    //  * @return \Illuminate\Database\Eloquent\Relations\HasMany
+    //  */
+    // public function registrosdeClases()
+    // {
+    //     return $this->hasMany(\App\Models\RegistrosdeClase::class, 'IdEvaluacion', 'IDEvaluacion');
+    // }
     
 }

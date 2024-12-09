@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class Registroclase
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Registroclase extends Model
 {
-    
+    protected $primaryKey = 'IdRegistroClases';
     protected $perPage = 20;
 
     /**
@@ -39,4 +40,15 @@ class Registroclase extends Model
         return $this->belongsTo(\App\Models\Malla::class, 'IdMalla', 'IdMalla');
     }
     
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($registroclase) {
+            // Verificar si hay una relación con Malla
+            if ($registroclase->malla()->exists()) {
+                throw new Exception("No se puede eliminar el registro de clase porque está relacionado con una malla.");
+            }
+        });
+    }
 }

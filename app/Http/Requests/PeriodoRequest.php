@@ -28,38 +28,40 @@ class PeriodoRequest extends FormRequest
                 'required',
                 'date',
                 function ($attribute, $value, $fail) {
-                    $fecha = Carbon::parse($value);
-                    $mes = $fecha->month; // Obtener el mes
+                    $fecha = \Carbon\Carbon::parse($value);
                     $anio = $fecha->year; // Obtener el año
-
-                    if ($mes != 1) { // Comprobar que el mes sea enero
+        
+                    if ($fecha->month != 1) { // Comprobar que el mes sea enero
                         $fail('La fecha de inicio debe ser en enero.');
                     }
-
+        
                     // Verificar si el año ya existe en la base de datos (excepto el período actual)
+                    $idPeriodo = optional($this->route('periodo'))->IDPeriodo; // Evitar error si no existe
                     $existeAnio = DB::table('periodos')
                         ->whereYear('FechaInicio', $anio)
-                        ->where('IDPeriodo', '!=', $this->route('periodo')->IDPeriodo) // Excluir registro actual
+                        ->when($idPeriodo, function ($query, $idPeriodo) {
+                            return $query->where('IDPeriodo', '!=', $idPeriodo);
+                        })
                         ->exists();
-
+        
                     if ($existeAnio) {
                         $fail("El año {$anio} ya está registrado para otro período.");
                     }
                 },
             ],
             'FechaFin' => [
-                'nullable', // Permitir nulos si el valor no se envía
+                'required', // Permitir nulos si el valor no se envía
                 'date',
                 function ($attribute, $value, $fail) {
-                    $fechaInicio = Carbon::parse($this->input('FechaInicio')); // Obtener FechaInicio del request
-
+                    $fechaInicio = \Carbon\Carbon::parse($this->input('FechaInicio')); // Obtener FechaInicio del request
+        
                     if ($value) { // Si se proporciona FechaFin, realizar validaciones adicionales
-                        $fechaFin = Carbon::parse($value);
-
+                        $fechaFin = \Carbon\Carbon::parse($value);
+        
                         if ($fechaFin->month != 12) { // Comprobar que el mes sea diciembre
                             $fail('La fecha de fin debe ser en diciembre.');
                         }
-
+        
                         if ($fechaInicio->year != $fechaFin->year) { // Comprobar que los años coincidan
                             $fail('El año de la fecha de fin debe coincidir con el de la fecha de inicio.');
                         }
@@ -68,6 +70,7 @@ class PeriodoRequest extends FormRequest
             ],
             'IDPeriodoE' => 'required|numeric',
         ];
+        
     }
 
     /**

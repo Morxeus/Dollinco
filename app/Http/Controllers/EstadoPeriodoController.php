@@ -12,18 +12,18 @@ use Illuminate\View\View;
 class EstadoPeriodoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra una lista de los recursos.
      */
     public function index(Request $request): View
     {
-        $estadoPeriodos = EstadoPeriodo::paginate();
+        $estadoPeriodos = EstadoPeriodo::paginate(10);
 
         return view('estado-periodo.index', compact('estadoPeriodos'))
             ->with('i', ($request->input('page', 1) - 1) * $estadoPeriodos->perPage());
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo recurso.
      */
     public function create(): View
     {
@@ -33,18 +33,18 @@ class EstadoPeriodoController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena un recurso recién creado en la base de datos.
      */
     public function store(EstadoPeriodoRequest $request): RedirectResponse
     {
         EstadoPeriodo::create($request->validated());
 
         return Redirect::route('estado-periodos.index')
-            ->with('success', 'EstadoPeriodo created successfully.');
+            ->with('success', 'Estado de periodo creado exitosamente.');
     }
 
     /**
-     * Display the specified resource.
+     * Muestra el recurso especificado.
      */
     public function show($id): View
     {
@@ -54,7 +54,7 @@ class EstadoPeriodoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar el recurso especificado.
      */
     public function edit($id): View
     {
@@ -62,24 +62,39 @@ class EstadoPeriodoController extends Controller
 
         return view('estado-periodo.edit', compact('estadoPeriodo'));
     }
-    
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el recurso especificado en la base de datos.
      */
     public function update(EstadoPeriodoRequest $request, EstadoPeriodo $estadoPeriodo): RedirectResponse
     {
         $estadoPeriodo->update($request->validated());
 
         return Redirect::route('estado-periodos.index')
-            ->with('success', 'EstadoPeriodo updated successfully');
+            ->with('success', 'Estado de periodo actualizado exitosamente.');
     }
 
+    /**
+     * Elimina el recurso especificado de la base de datos.
+     */
     public function destroy($id): RedirectResponse
     {
-        EstadoPeriodo::find($id)->delete();
+        try {
+            $estadoPeriodo = EstadoPeriodo::findOrFail($id);
 
-        return Redirect::route('estado-periodos.index')
-            ->with('success', 'EstadoPeriodo deleted successfully');
+            // Verificar si tiene relaciones antes de eliminar
+            if ($estadoPeriodo->periodos()->exists()) {
+                return Redirect::route('estado-periodos.index')
+                    ->with('error', 'No se puede eliminar el estado de periodo porque tiene relación con otros campos.');
+            }
+
+            $estadoPeriodo->delete();
+
+            return Redirect::route('estado-periodos.index')
+                ->with('success', 'Estado de periodo eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('estado-periodos.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el estado de periodo: ' . $e->getMessage());
+        }
     }
 }

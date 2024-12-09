@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 /**
  * Class CursoOfrecido
@@ -48,6 +49,18 @@ class CursoOfrecido extends Model
     public function periodo()
     {
         return $this->belongsTo(\App\Models\Periodo::class, 'IDPeriodo', 'IDPeriodo');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($cursoOfrecido) {
+            // Si tiene relaciones con Curso o Periodo, evitar la eliminación
+            if ($cursoOfrecido->curso()->exists() || $cursoOfrecido->periodo()->exists()) {
+                throw new Exception("No se puede eliminar el CursoOfrecido porque tiene relaciones con Curso o Periodo.");
+            }
+        });
     }
     
 }
